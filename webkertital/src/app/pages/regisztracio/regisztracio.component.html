@@ -1,1 +1,63 @@
-<p>regisztracio works!</p>
+<main>
+    @if(!isLoggedIn()){
+        <div class="bejeli">
+            <div class="wrapper">
+                <h2>Regisztráció</h2>
+                @if(regiError){
+                    <div class="invalid">
+                        <p>A jelszavak nem egyeznek!</p>
+                    </div>
+                }
+                <form [formGroup]="regiForm" (ngSubmit)="signup()">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Vezetéknév</mat-label>
+                        <input matInput type="text" formControlName="vezeteknev" required="true"/>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Keresztnév</mat-label>
+                        <input matInput type="text" formControlName="keresztnev" required="true"/>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>E-mail cím</mat-label>
+                        <input matInput type="email" formControlName="email" required="true"/>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Jelszó</mat-label>
+                        <input matInput type="password" formControlName="jelszo" required="true"/>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Jelszó újra</mat-label>
+                        <input matInput type="password" formControlName="jelszoujra" required="true"/>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Telefonszám</mat-label>
+                        <input matInput type="tel" formControlName="telefonszam" required="true"/>
+                    </mat-form-field>
+                    @if(loading){
+                        <div class="spinner-container">
+                            <mat-progress-spinner mode="indeterminate" [diameter]="40"></mat-progress-spinner>
+                        </div>
+                    }
+                    @if(!loading){
+                        <button mat-flat-button [disabled]="loading" >Regisztráció</button>
+                        <div class="member">
+                            Már van fiókod?
+                            <br>
+                            <br>
+                            <a mat-list-item routerLink="/bejelentkezes" routerLinkActive="activate-list-item">Jelentkezz be itt</a>
+                        </div>
+                    }
+                </form>
+            </div>
+        </div>
+    }@else {
+        <div class="hibasvalami">
+            <div class="azthiszemez">
+                <h2>Hoppáré!</h2>
+                <p>Ha fiókot szeretnél létrehozni kérjük jelentkezzen ki!</p>
+                <br>
+                <a mat-list-item routerLink="/profil" routerLinkActive="activate-list-item"></a>
+            </div>
+        </div>
+    }
+</main>

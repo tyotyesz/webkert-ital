@@ -55,7 +55,7 @@ app-root{
         text-align: center;
     }
 }
-app-bejelentkezes{
+app-bejelentkezes, app-regisztracio{
     @include mat.form-field-overrides((
         outlined-caret-color: white,
         outlined-focus-outline-color: white,
