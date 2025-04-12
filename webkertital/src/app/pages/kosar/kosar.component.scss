@@ -1,0 +1,112 @@
+.kosar-oldal{
+    margin-top: 80px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 80px;
+}
+table{
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Montserrat', sans-serif;
+}
+.kosar-info{
+    display: flex;
+    flex-wrap: wrap;
+}
+th{
+    text-align: left;
+    padding: 5px;
+    color: #fff;
+    background: #ff9966;
+    font-family: 'Montserrat', sans-serif;
+}
+td{
+    padding: 10px 5px;
+}
+td input{
+    width: 40px;
+    height: 30px;
+    padding: 5px;
+}
+td button {
+    color: #ff9966;
+    font-size: 12px;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+}
+td img {
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+}
+.teljes-osszeg{
+    display: flex;
+    justify-content: flex-end;
+}
+.teljes-osszeg table{
+    border-top: 3px solid #ff9966;
+    width: 100%;
+    max-width: 400px;
+    font-family: 'Montserrat', sans-serif;
+}
+td:last-child{
+    text-align: right;
+}
+th:last-child{
+    text-align: right;
+}
+.azthiszemez {
+    width: 330px;
+    padding: 2rem 1rem;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+    background-color: #003366;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', sans-serif;
+}
+.azthiszemez a{
+    color: white;
+    text-decoration: none;
+}
+.azthiszemez a:hover{
+    text-decoration: underline;
+}
+.azthiszemez ::placeholder{
+    font-family: 'Montserrat', sans-serif;
+}
+.azthiszemez h2{
+    font-size: 2rem;
+    color: #ff9966;
+    margin-bottom: 1.2rem;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 0;
+    text-align: center;
+}
+.azthiszemez p{
+    font-size: 1rem;
+    color: white;
+    margin-bottom: 1.2rem;
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+}
+@media(max-width: 768px){
+    .kosar-info{
+        margin-top: 0;
+    }
+    .kosarka{
+        padding-top: 214px;
+    }
+    .azthiszemez{
+        margin-top: 0;
+    }
+    .hibasvalami{
+        padding-top: 184px;
+    }
+}

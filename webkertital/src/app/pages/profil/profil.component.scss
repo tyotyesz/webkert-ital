@@ -1,0 +1,189 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Montserrat" sans-serif;
+}
+body {
+    background: white;
+}
+.bejeli{
+    display: flex;
+    flex-flow: row wrap;
+    box-sizing: border-box;
+}
+.wrapper {
+    width: 1000px;
+    padding: 2rem 1rem;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+    background-color: #003366;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', sans-serif;
+}
+.wrapper ::placeholder{
+    font-family: 'Montserrat', sans-serif;
+}
+h2{
+    font-size: 2rem;
+    color: #ff9966;
+    margin-bottom: 1.2rem;
+    font-family: 'Montserrat', sans-serif;
+    text-align: left;
+}
+.szokoz{
+    margin-top: 1.5rem;
+
+}
+.bejeli .wrapper .szokoz p{
+    color: white;
+    font-size: 1rem;
+    text-align: left;
+}
+.bejeli .wrapper .szokoz h3{
+    margin-bottom: 1.2rem;
+    margin-top: 1.2rem;
+    color: #ff9966;
+}
+.hirlevel-container {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 8px; /* Távolság a szöveg és a gomb között */
+  }
+.hirlevel-container button {
+    display: flex; /* Flexbox használata */
+    align-items: center; /* Vertikális középre igazítás */
+    justify-content: center; /* Horizontális középre igazítás */
+    padding: 10px; /* Gomb belső margója */
+    font-family: 'Montserrat', sans-serif;
+    transition: 0.3s;
+}
+.hirlevel-container button:hover{
+    background: rgba(17, 107, 143, 0.877);
+}
+
+
+
+.jelszobox{
+    text-align: left;
+}
+.bejeli .wrapper form mat-form-field{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    outline: none;
+    padding: 6px 10px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    border-radius: 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+.gomb{
+    text-align: left;
+}
+.szallitasi-adatok{
+    text-align: left;
+}
+.bejeli .wrapper form button, .kijelibutton {
+    font-size: 1rem;
+    margin-top: 1.8rem;
+    margin-bottom: 1.8rem;
+    padding: 10px 0;
+    border-radius: 20px;
+    outline: none;
+    border: none;
+    width: 300px;
+    color: #fff;
+    cursor: pointer;
+    background: #ff9966;
+    font-family: 'Montserrat', sans-serif;
+    transition: 0.3s;
+    
+}
+.bejeli .wrapper form button:hover, .kijelibutton:hover{
+    background: rgba(17, 107, 143, 0.877);
+}
+.bejeli .wrapper form input:focus{
+    border: 1px solid rgb(192, 192, 192);
+}
+.terms{
+    margin-top: 0.2rem;
+}
+.terms input{
+    height: 1em;
+    width: 1em;
+    vertical-align: middle;
+    cursor: pointer;
+}
+.terms label{
+    font-size: 0.7rem;
+}
+.terms a{
+    color: #003366;
+    text-decoration: none;
+}
+.member{
+    font-size: 0.8rem;
+    margin-top: 1.4rem;
+    color: white;
+}
+.member a {
+    color: white;
+    text-decoration: none;
+}
+.azthiszemez {
+    width: 330px;
+    padding: 2rem 1rem;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+    background-color: #003366;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', sans-serif;
+}
+.azthiszemez a{
+    color: white;
+    text-decoration: none;
+}
+.azthiszemez a:hover{
+    text-decoration: underline;
+}
+.azthiszemez ::placeholder{
+    font-family: 'Montserrat', sans-serif;
+}
+.azthiszemez h2{
+    font-size: 2rem;
+    color: #ff9966;
+    margin-bottom: 1.2rem;
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 0;
+    text-align: center;
+}
+.azthiszemez p{
+    font-size: 1rem;
+    color: white;
+    margin-bottom: 1.2rem;
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+}
+@media(max-width: 768px){
+    .wrapper{
+        margin-top: 0;
+    }
+    .bejeli{
+        padding-top: 184px;
+    }
+    .azthiszemez{
+        margin-top: 0;
+    }
+    .hibasvalami{
+        padding-top: 184px;
+    }
+}

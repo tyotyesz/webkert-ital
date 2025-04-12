@@ -1,0 +1,74 @@
+<main>
+    @if (!isLoggedIn()){
+        <div class="hibasvalami">
+            <div class="azthiszemez">
+                <h2>Hoppáré!</h2>
+                <p>A rendelések megtekintésehez kérjük jelentkezzen be!</p>
+                <a mat-list-item routerLink="/bejelentkezes" routerLinkActive="activate-list-item">Kattints ide a bejelentkezéshez!</a>   
+            </div>
+        </div>
+    }@else {
+        @for (mennyi of mennyitermek; track $index) {
+            @if(isKosarUres()){
+                <div class="hibasvalami">
+                    <div class="azthiszemez">
+                        <h2>Hoppáré!</h2>
+                        <p>A kosarad üres!</p>
+                        <a mat-list-item routerLink="/fooldal" routerLinkActive="activate-list-item">Kattints ide a vásárláshoz!</a>   
+                    </div>
+                </div>
+            }
+            @else {
+                <div class="kosarka">
+                    <div class="kosar-oldal">
+                        <table>
+                            <tr>
+                                <th>Termék</th>
+                                <th>Mennyiség</th>
+                                <th>Egységár</th>
+                            </tr>
+                        @for (item of termekek; track $index) {
+                            <tr>
+                                <td>
+                                    <div class="kosar-info">
+                                        <img mat-card-image src="{{getTermekId(item.id).kepeleres}}" alt="{{getTermekId(item.id)?.termeknev}}"> 
+                                        <div>
+                                            <p>{{getTermekId(item.id)?.termeknev}}</p>
+                                            <small>Ár: {{getTermekId(item.id)?.termekara}} Ft</small><br>
+                                            <button mat-flat-button (click)="onDelete(item.id)">Törlés</button>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="number" [(ngModel)]="item.mennyi" (change)="updateKosar(item.id, item.mennyi)" min="0">
+                                    <button mat-flat-button hidden (click)="updateKosar(item.id, item.mennyi)"></button>
+                                </td>
+                                <td>{{getTermekId(item.id)?.termekara * item.mennyi}} Ft</td>
+                            </tr>
+                        }   
+                        </table>            
+                    </div>
+                </div>
+                <div class="teljes-osszeg">              
+                    <table>
+                        <tr>
+                            <td>Összeg</td>
+                            <td>{{getTeljesOsszeg()}} Ft</td>
+                        </tr>
+                        <tr>
+                            <td>Áfa Összeg</td>
+                            <td>{{getAfa()}} Ft</td>
+                        </tr>
+                        <tr>
+                            <td>Összesen</td>
+                            <td>{{getVegosszeg()}} Ft</td>
+                        </tr>
+                    </table>
+                </div>
+            }
+        }
+        
+            
+    }
+            
+</main>

@@ -1,0 +1,130 @@
+@media (max-width: 768px) {
+    .gombi {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+
+    .validate-bracket {
+        width: 90%;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: clamp(2em, 5vw, 2em);
+    }
+
+    h2 {
+        font-size: clamp(16px, 3vw, 16px);
+    }
+}
+
+
+
+.igazolas-main{
+    background-image: url("../../../assets/img/eletkor_igazolas.jpg");
+    width: 100%;
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    /*background-attachment: fixed;
+    position: relative;
+    margin: auto;
+    padding: auto;*/
+    //display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box;
+
+    
+}
+.igazolas-main::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.igazolas-main > * {
+    position: relative;
+    z-index: 2;
+}
+h1{
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    color: black;
+    margin: 0;
+    font-weight: bold;
+    font-size: clamp(2em, 5vw, 2em);
+}
+h2{
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+    color: black;
+    font-size: clamp(16px, 3vw, 16px);
+    padding-bottom: 15px;
+    font-weight: bold;
+}
+
+.validate-bracket{
+    width: clamp(300px, 50%, 500px);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 10px auto;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.5);
+    font-family: 'Montserrat', sans-serif;
+    //align-items: center;
+    box-sizing: border-box;
+}
+
+.gombi{
+    /*font-family: 'Montserrat', sans-serif;
+    align-self: center;
+    padding: 0 45px;
+    margin-left: 50px;
+    margin-right: 50px;
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    transition: 0.3s;
+    line-height: 35px;*/
+    font-family: 'Montserrat', sans-serif;
+    padding: 10px 5vw; // A gomb szélessége a képernyő szélességéhez igazodik
+    margin: 10px;
+    color: rgb(255, 255, 255);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: clamp(14px, 2vw, 20px); // Minimum 14px, maximum 20px
+    font-weight: bold;
+    transition: 0.3s;
+    line-height: 35px;
+    background-color: #ff9966;
+}
+/*.gombi:hover{
+    /*font-family: 'Montserrat', sans-serif;
+    background-color: #ffffff;
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    
+}*/
+.gombi:hover{
+    background-color: #ffffff;
+    color: black;
+    font-size: clamp(14px, 2vw, 20px); // Minimum 14px, maximum 20px
+    font-weight: bold;
+}
+
+

@@ -1,0 +1,93 @@
+
+  .termekek{
+    margin-left: 85px;
+    margin-right: 85px;
+    margin-bottom: 30px;
+  }
+  .termekek .kiscsavo{
+    padding-top: 30px;
+  }
+  .termekek fieldset{
+    border: solid 5px #ff9966;
+    border-radius: 15px;
+    
+  }
+  .termekek legend{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  .termekek .box-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+  
+  }
+  .termekek .box-container .box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+  
+  }
+  .kosarba-gomb{
+    background-color: #ff9966;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+  }
+  .kosarba-gomb:hover{
+    background-color: black;
+    color: white;
+  }
+  .akcios{
+    color: black;
+    padding-bottom: 10px;
+  }
+  .elozo-ar{
+    text-decoration: line-through;
+    color: #545454;
+  }
+  .termekek .box-container .box p{
+    text-align: center;
+    padding: 15px 0;
+  }
+  .termekek .box-container .box img{
+    width: 160px;
+    
+  }
+  p{
+    font-family: 'Montserrat', sans-serif;
+    color: rgb(0, 0, 0);
+    text-align: left;
+    font-size: 20px;
+    margin: 0;
+    text-align: left;
+  }
+  @media (max-width: 768px) {
+    .termekek{
+      padding-top: 134px;
+      margin-top: 0px;
+    }
+    .termekek .box-container{
+      justify-content: center;
+    }
+    .termekek .box-container .box{
+      padding-bottom: 10px;
+    }
+    
+  }

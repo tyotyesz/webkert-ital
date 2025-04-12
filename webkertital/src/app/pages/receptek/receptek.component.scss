@@ -1,0 +1,98 @@
+.koktelok {
+    margin: 20px;
+  }
+  
+  .receptek-bevezeto {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px;
+    margin-bottom: 20px;
+  }
+  
+  .receptek-bevezeto h1 {
+    font-size: 28px;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    color: #ff9966;
+  }
+  
+  .receptek-bevezeto p {
+    color: #333;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+  
+  .rovidleiras {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+   
+    margin-bottom: 20px;
+  }
+  
+  .rovidleiras h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
+    color: #ff9966;
+  }
+  
+  .rovidleiras p {
+    color: #333;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  .hozzavalok {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .hozzavalok h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .hozzavalok nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .hozzavalok nav ul li {
+    color: #333;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  .elkeszites {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .elkeszites p {
+    color: #333;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .akoktel {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px;
+    margin-bottom: 20px;
+  }
+  @media(max-width: 768px){
+    .koktelok {
+      margin: 0px 20px 20px 20px;
+      padding-top: 154px;
+    }
+  }
+  

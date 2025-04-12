@@ -1,0 +1,113 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Montserrat" sans-serif;
+}
+body {
+    background: white;
+}
+
+.wrapper {
+    width: 330px;
+    padding: 2rem 1rem;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+    background-color: #003366;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', sans-serif;
+}
+.wrapper ::placeholder{
+    font-family: 'Montserrat', sans-serif;
+}
+h2{
+    font-size: 2rem;
+    color: #ff9966;
+    margin-bottom: 1.2rem;
+    font-family: 'Montserrat', sans-serif;
+}
+.bejeli .wrapper form mat-form-field {
+    width: 92%;
+    padding: 12px 20px;
+    margin-bottom: 10px;
+    font-family: 'Montserrat', sans-serif;
+}
+mat-label{
+    text-align: center;
+}
+.invalid{
+    text-align: center !important;
+    color: red !important;
+    font-size: 1rem !important;
+    padding-bottom: 15px;
+}
+.bejeli .wrapper form button {
+    font-size: 1rem;
+    margin-top: 1.8rem;
+    padding: 10px 0;
+    border-radius: 20px;
+    outline: none;
+    border: none;
+    width: 90%;
+    color: #fff;
+    cursor: pointer;
+    background: #ff9966;
+    font-family: 'Montserrat', sans-serif;
+    transition: 0.3s;
+}
+.bejeli .wrapper form button:hover{
+    background: rgba(17, 107, 143, 0.877);
+}
+/*.bejeli .wrapper form input:focus{
+    border: 1px solid rgb(192, 192, 192);
+}*/
+.terms{
+    margin-top: 0.2rem;
+}
+.terms input{
+    height: 1em;
+    width: 1em;
+    vertical-align: middle;
+    cursor: pointer;
+}
+.terms label{
+    font-size: 0.7rem;
+}
+.terms a{
+    color: #003366;
+    text-decoration: none;
+}
+.member{
+    font-size: 0.8rem;
+    margin-top: 1.4rem;
+    color: white;
+}
+.member a {
+    color: white;
+    text-decoration: none;
+}
+.member a:hover{
+    text-decoration: underline;
+}
+.recover{
+    text-align: right;
+    font-size: 0.7rem;
+    margin: 0.3rem 1.4rem 0 0;
+}
+.recover a {
+    text-decoration: none;
+    color: white;
+}
+
+@media(max-width: 768px){
+    .wrapper{
+        margin-top: 0;
+    }
+    .bejeli{
+        padding-top: 184px;
+    }
+}

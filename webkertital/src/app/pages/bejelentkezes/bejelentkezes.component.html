@@ -1,0 +1,41 @@
+<main>
+    @if(!isLoggedIn()){
+    <div class="bejeli">
+        <div class="wrapper">
+            <h2>Bejelentkezés</h2>
+            @if(loginError){
+                <div class="invalid">
+                    <p>Hibás email cím vagy jelszó!</p>
+                </div>
+            }
+            <form [formGroup]="loginForm" (ngSubmit)="login()">
+                <mat-form-field appearance="outline">
+                    <mat-label>E-mail cím</mat-label>
+                    <input matInput type="email" formControlName="email" required="true"/>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Jelszó</mat-label>
+                    <input matInput type="password" formControlName="jelszo" required="true"/>
+                </mat-form-field>
+                <button mat-flat-button>Bejelentkezés</button>
+                <div class="member">
+                    Még nincs fiókod?
+                    <br>
+                    <br>
+                    <a mat-list-item routerLink="/regisztracio" routerLinkActive="activate-list-item">Regisztrálj itt</a>
+                </div>
+            </form>
+           </div>
+    </div>  
+    }
+    @else {
+        <div class="hibasvalami">
+            <div class="azthiszemez">
+                <h2>Hoppáré!</h2>
+                <p>Te már be vagy jelentkezve!</p>
+                <br>
+                <a mat-list-item routerLink="/profil" routerLinkActive="activate-list-item">Ugrás a profilra!</a>   
+            </div>
+        </div>
+    }
+</main>
