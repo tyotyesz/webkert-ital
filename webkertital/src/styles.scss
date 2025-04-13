@@ -12,7 +12,7 @@ app-fomenu{
         filled-label-text-color: white
     ));
 }
-app-alkoholos, app-uditok, app-kulonleges{
+app-alkoholos, app-uditok, app-kulonleges, app-admin{
     @include mat.button-overrides((
         filled-container-color: grey,
         filled-label-text-color: white
@@ -55,7 +55,7 @@ app-root{
         text-align: center;
     }
 }
-app-bejelentkezes, app-regisztracio{
+app-bejelentkezes, app-regisztracio, app-admin{
     @include mat.form-field-overrides((
         outlined-caret-color: white,
         outlined-focus-outline-color: white,
@@ -71,9 +71,11 @@ app-bejelentkezes, app-regisztracio{
         outlined-error-hover-outline-color: white,
         outlined-error-focus-label-text-color: white,
         outlined-error-hover-label-text-color: white,
-        outlined-error-focus-outline-color: white
-        
+        outlined-error-focus-outline-color: white,
+    ));
 
+    @include mat.paginator-overrides((
+        container-background-color: transparent
     ));
     
 }

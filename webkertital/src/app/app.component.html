@@ -15,7 +15,7 @@
                         <mat-form-field class="form-search" appearance="outline">
                             <mat-label>Keresés</mat-label>
                             <input matInput type="search"/>
-                            <button class="keresogomb" mat-icon-button matSuffix>
+                            <button class="keresogomb" mat-icon-button matSuffix (click)="kereses()">
                                 <mat-icon style="font-size: 24px;">search</mat-icon>
                             </button>
                         </mat-form-field>

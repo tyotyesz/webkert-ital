@@ -5,10 +5,73 @@
                 <h2>Szerkesztői felület</h2>
                 <hr>
                 <div class="szokoz">
-                    <!--<form [formGroup]="adminForm" (ngSubmit)="adminAdd()">
-
-                    </form>-->
+                    <form [formGroup]="adminForm" (ngSubmit)="adminAdd()">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Terméknév</mat-label>
+                            <input matInput type="text" formControlName="termeknev" required="true"/>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Termékára</mat-label>
+                            <input matInput type="text" formControlName="termekara" required="true"/>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Kategória</mat-label>
+                            <mat-select formControlName="kategoria" required="true">
+                                <mat-option value="uditok">Üdítő</mat-option>
+                                <mat-option value="alkoholos">Alkoholos</mat-option>
+                                <mat-option value="kulonleges">Különleges</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <div class="gomb">
+                            <button mat-flat-button>Hozzáadás</button>
+                        </div>
+                    </form>
                 </div>
+            </div>
+        </div>
+        <div class="bejeli">
+            <div class="wrapper">
+                <h2>Termékek szerkesztése</h2>
+                <hr>
+                <div class="szokoz">
+                    <table class="admin-tabla">
+                        <tr>
+                            <th>Termék neve</th>
+                            <th>Termék ára</th>
+                            <th>Kategória</th>
+                            <th>Kép</th>
+                            <th>Műveletek</th>
+                        </tr>
+                        @for (item of termkekObject; track $index) {
+                            <tr>
+                                <td>{{item.termeknev}}</td>
+                                <td>{{item.termekara}}</td>
+                                <td>{{item.kategoria}}</td>
+                                <td><img mat-card-image src="{{item.kepeleres}}" style="width: 100px;" alt="Termék képe"></td>
+                                <td><button mat-flat-button (click)="termekTorles(item.id)">Törlés</button></td>
+                            </tr>
+                        }
+                    </table>
+                    <mat-paginator [length]="20" [pageSize]="10" [pageSizeOptions]="[2, 5, 10]" aria-label="Oldal navigáció"></mat-paginator>
+                </div>
+            </div>
+        </div>
+    }@else if (isLoggedIn() && !isAdmin()) {
+        <div class="hibasvalami">
+            <div class="azthiszemez">
+                <h2>Hoppáré!</h2>
+                <p>Hogy megtekinthesd az oldalt kérjük lépj be az admin fiókba!</p>
+                <br>
+                <a mat-list-item routerLink="/profil" routerLinkActive="activate-list-item">Kattints ide a profilhoz!</a>
+            </div>
+        </div>
+    }@else {
+        <div class="hibasvalami">
+            <div class="azthiszemez">
+                <h2>Hoppáré!</h2>
+                <p>Hogy megtekinthesd az oldalt kérjük lépj be az admin fiókba!</p>
+                <br>
+                <a mat-list-item routerLink="/bejelentkezes" routerLinkActive="activate-list-item">Kattints ide a bejelentkezéshez!</a>
             </div>
         </div>
     }

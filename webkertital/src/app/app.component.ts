@@ -57,4 +57,7 @@ export class AppComponent {
     const userKosar = KosarObject.filter(termek => termek.user_id === userId);
     return userKosar.reduce((osszeg, item) => osszeg + item.mennyi, 0);
   }
+  kereses(): void{
+    this.router.navigate(["/kereses"]);
+  }
 }

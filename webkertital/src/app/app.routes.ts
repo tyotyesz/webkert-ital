@@ -14,11 +14,13 @@ import { RegisztracioComponent } from './pages/regisztracio/regisztracio.compone
 import { AdminComponent } from './pages/admin/admin.component';
 import { JelszomodositasComponent } from './pages/jelszomodositas/jelszomodositas.component';
 import { SzallitasiadatokComponent } from './pages/szallitasiadatok/szallitasiadatok.component';
+import { KeresesComponent } from './pages/kereses/kereses.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'igazolas', pathMatch: 'full',},
     { path: 'igazolas', component: IgazolasComponent},
     { path: 'fomenu', component: FomenuComponent},
+    { path: 'kereses', component: KeresesComponent},
     { path: 'uditok', component: UditokComponent},
     { path: 'alkoholos', component: AlkoholosComponent},
     { path: 'kulonleges', component: KulonlegesComponent},
