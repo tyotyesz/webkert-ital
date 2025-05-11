@@ -20,7 +20,7 @@ export const routes: Routes = [
     { path: '', redirectTo: 'igazolas', pathMatch: 'full',},
     { path: 'igazolas', component: IgazolasComponent},
     { path: 'fomenu', component: FomenuComponent},
-    { path: 'kereses', component: KeresesComponent},
+    { path: 'kereses/:query', component: KeresesComponent},
     { path: 'uditok', component: UditokComponent},
     { path: 'alkoholos', component: AlkoholosComponent},
     { path: 'kulonleges', component: KulonlegesComponent},

@@ -18,7 +18,7 @@ export class SzallitasiadatokComponent {
   ){}
 
   isLoggedIn(): boolean{
-    return this.felhasznaloService.isLogged();
+    return localStorage.getItem('bejelentkezve-e') === 'true';
   }
 
 }

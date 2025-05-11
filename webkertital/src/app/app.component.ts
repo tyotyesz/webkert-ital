@@ -10,8 +10,6 @@ import {MatCardModule} from '@angular/material/card';
 import {MatBadgeModule} from '@angular/material/badge';
 import { KosarService } from './shared/services/kosar.service';
 import { KosarmennyisegService } from './shared/services/kosarmennyiseg.service';
-import { KosarMennyisegObject } from './shared/models/kosarmennyiseg';
-import { KosarObject } from './shared/models/kosar';
 
 @Component({
   selector: 'app-root',
@@ -30,6 +28,9 @@ import { KosarObject } from './shared/models/kosar';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
+  title(title: any) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     private router: Router, 
     private felhasznaloService: FelhasznaloService, 
@@ -38,7 +39,7 @@ export class AppComponent {
   ) {}
 
   ngOnInit(): void {
-    this.updateKosarMennyiseg();
+    /*this.updateKosarMennyiseg();*/
   }
   
   isFomenuRoute(){
@@ -46,18 +47,21 @@ export class AppComponent {
   }
   
   isLoggedIn(): boolean {
-    return this.felhasznaloService.isLogged();
+    return localStorage.getItem('bejelentkezve-e') === 'true';
   }
   isAdmin(): boolean {
-    return this.felhasznaloService.isAdministrator();
+    return localStorage.getItem('admin-e') === 'true';
   }
 
-  updateKosarMennyiseg(): number{
+  /*updateKosarMennyiseg(): number{
     const userId = this.felhasznaloService.getUserId();
     const userKosar = KosarObject.filter(termek => termek.user_id === userId);
     return userKosar.reduce((osszeg, item) => osszeg + item.mennyi, 0);
-  }
-  kereses(): void{
-    this.router.navigate(["/kereses"]);
+  }*/
+  kereses(query: string): void{
+    if(query.trim()){
+      this.router.navigate(["/kereses", query]);
+    }
+    
   }
 }

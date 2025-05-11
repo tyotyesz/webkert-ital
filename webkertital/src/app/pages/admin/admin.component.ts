@@ -6,7 +6,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
-import { TermekekObject } from '../../shared/models/termekek';
 import { MatCardModule } from '@angular/material/card';
 import { Router, RouterLinkActive, RouterLink } from '@angular/router';
 import { MatListItem } from '@angular/material/list';
@@ -31,7 +30,6 @@ import {MatPaginatorModule} from '@angular/material/paginator';
   styleUrl: './admin.component.scss'
 })
 export class AdminComponent {
-  termkekObject = TermekekObject;
 
   adminForm!: FormGroup;
   constructor(
@@ -53,11 +51,11 @@ export class AdminComponent {
   }
 
   isLoggedIn(): boolean {
-    return this.felhasznaloService.isLogged();
+    return localStorage.getItem('bejelentkezve-e') === 'true';
   }
 
   isAdmin(): boolean {
-    return this.felhasznaloService.isAdministrator();
+    return localStorage.getItem('admin-e') === 'true';
   }
 
   adminAdd(): void{

@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
 import { FelhasznaloService } from '../../shared/services/felhasznalo.service';
-import { KosarMennyisegObject } from '../../shared/models/kosarmennyiseg';
 import { KosarService } from '../../shared/services/kosar.service';
 import { Router, RouterLink, RouterLinkActive} from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { TermekekService } from '../../shared/services/termekek.service';
-import { KosarObject } from '../../shared/models/kosar';
 import { MatCardImage } from '@angular/material/card';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -28,7 +26,6 @@ import { MatButtonModule } from '@angular/material/button';
 export class KosarComponent {
   kosarForm!: FormGroup
   termekek: any[] = [];
-  mennyitermek: any[] = [];
   teljesosszeg: number = 0;
 
   constructor(
@@ -40,26 +37,24 @@ export class KosarComponent {
   ){}
 
   ngOnInit(): void{
-    this.termekek = KosarObject.filter(termek => termek.user_id === this.felhasznaloService.getUserId());
+    /*this.termekek = KosarObject.filter(termek => termek.user_id === this.felhasznaloService.getUserId());*/
     console.log(this.termekek);
-    this.mennyitermek = KosarMennyisegObject.filter(mennyi => mennyi.user_id === this.felhasznaloService.getUserId());
-    console.log(this.mennyitermek);
-    this.updateKosarMennyiseg();
+    /*this.updateKosarMennyiseg();*/
     
   }
 
 
   isLoggedIn(): boolean{
-    return this.felhasznaloService.isLogged();
+    return localStorage.getItem('bejelentkezve-e') === 'true';
   }
   getTermekId(id: number): any{
-    const termek = this.termekekService.getTermekekById(id);
+    /*const termek = this.termekekService.getTermekekById(id);
     console.log(termek);
     if (!termek) {
       console.error(`Termék ID: ${id} nem található.`);
       return null;
     }
-    return termek;
+    return termek;*/
   }
   getTeljesOsszeg(): number{
     return this.termekek.reduce((osszeg, item) => {
@@ -82,7 +77,7 @@ export class KosarComponent {
   }
 
   onDelete(id: number){
-    const index = KosarObject.findIndex(termek => termek.id === id && termek.user_id === this.felhasznaloService.getUserId());
+    /*const index = KosarObject.findIndex(termek => termek.id === id && termek.user_id === this.felhasznaloService.getUserId());
     if(index !== -1){
       KosarObject.splice(index, 1);
       console.log("Termék ID: "+id+" törölve a kosárból.");
@@ -92,15 +87,15 @@ export class KosarComponent {
 
     this.termekek = KosarObject.filter(termek => termek.user_id === this.felhasznaloService.getUserId());
 
-    this.updateKosarMennyiseg();
+    this.updateKosarMennyiseg();*/
   }
-  updateKosarMennyiseg(): number{
+  /*updateKosarMennyiseg(): number{
     const userId = this.felhasznaloService.getUserId();
     const userKosar = KosarObject.filter(termek => termek.user_id === userId);
     return userKosar.reduce((osszeg, item) => osszeg + item.mennyi, 0);
-  }
+  }*/
 
-  updateKosar(id: number, ujMennyiseg: number){
+  /*updateKosar(id: number, ujMennyiseg: number){
     const index = KosarObject.findIndex(termek => termek.id === id && termek.user_id === this.felhasznaloService.getUserId());
 
     if(index !== -1){
@@ -120,7 +115,7 @@ export class KosarComponent {
 
     this.termekek = KosarObject.filter(termek => termek.user_id === this.felhasznaloService.getUserId());
     this.updateKosarMennyiseg();
-  }
+  }*/
 
   isKosarUres(): boolean {
     return this.termekek.every(item => item.mennyi === 0) || this.termekek.length === 0;

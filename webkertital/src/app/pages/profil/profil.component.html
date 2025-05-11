@@ -5,7 +5,7 @@
                 <h2>Személyes adatok</h2>
                     <hr>
                 <div class="szokoz">
-                    <form [formGroup]="profilForm" (ngSubmit)="updateProfile()" >
+                    <form [formGroup]="profilForm" > <!-- updateProfile() kell -->
                         <mat-form-field appearance="outline">
                             <mat-label>Vezetéknév</mat-label>
                             <input matInput type="text" formControlName="vezeteknev"/>
@@ -46,11 +46,11 @@
                         <div class="szallitasi-adatok">
                             <h3>
                                 <div class="hirlevel-container">
-                                    @if(getHirlevelsub()){
+                                    <!--@if(getHirlevelsub()){
                                         Hírlevélre feliratkozva<button mat-flat-button (click)="HirlevelEltavolit()">Eltávolítás</button>
                                     }@else {
                                         Hírlevél feliratkozás<button mat-flat-button (click)="HirlevelHozzaad()">Feliratkozás</button>
-                                    }
+                                }-->
                                 </div>
                             </h3>
                         </div>
@@ -58,7 +58,7 @@
                         <div class="szallitasi-adatok">
                             <h3>
                                 <div class="hirlevel-container">
-                                    @if(getSzallitasiAdatok() !== ''){
+                                    <!--@if(getSzallitasiAdatok() !== ''){
                                         Szállítási adatok <button mat-flat-button (click)="SzallitasEltavolit()">Eltávolítás</button>
                                         <p>{{getSzallitasiAdatok()}} Szeged 6700</p>
                                         <br>
@@ -66,13 +66,13 @@
                                         Szállítási adatok <button mat-flat-button (click)="SzallitasHozzaad()">Hozzáadás</button>
                                         <p>Még nincs megadva szállítási adat!</p>
                                         <br>
-                                    }
+                                }-->
                                 </div>
                             </h3>
                         </div>
                         <div class="szallitasi-adatok">
                             <h3>Fizetési adatok</h3>
-                            @if(getFizetesiAdatok() === 'kartya'){
+                            <!--@if(getFizetesiAdatok() === 'kartya'){
                                 <p>Kártyás fizető!</p>
                                 <br>
                             }@else if(getFizetesiAdatok() === 'utanvet') {
@@ -81,7 +81,7 @@
                             }@else {
                                 <p>Még nincs megadva fizetési adat!</p>
                                 <br>
-                            }
+                        }-->
                         </div>
                         <hr>
                         <div class="kijelentkezes">

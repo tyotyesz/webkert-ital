@@ -1,23 +1,17 @@
 <main class="alkeszitalok" id="alkeszitalok">
     <h1 class="heading">Különleges <span> Italok</span></h1>
       <div class="box-container">
-        @for (item of TermekObject; track $index) {
-            @if(item.kategoria === 'kulonleges'){
-                <div class="box">
-                    <div class="kep">
-                        <img mat-card-image src="{{item.kepeleres}}" alt="{{item.termeknev}}">
-                        @if(isLoggedIn()){
-                            <div class="icon">
-                                <button mat-mini-fab><mat-icon>shopping_basket</mat-icon></button>
-                            </div>
-                        }
-                    </div>
-                    <div class="italok">
-                        <h3>{{item.termeknev}}</h3>
-                        <div class="ar">{{item.termekara}} Ft</div>
-                    </div>
+        <div class="box" *ngFor="let item of kulonlegesTermekek">
+            <div class="kep">
+                <img mat-card-image [src]="item.kepeleres" [alt]="item.termeknev">
+                <div class="icon" *ngIf="isLoggedIn()">
+                    <button mat-mini-fab><mat-icon>shopping_basket</mat-icon></button>
                 </div>
-            }
-        }
+            </div>
+            <div class="italok">
+                <h3>{{item.termeknev}}</h3>
+                <div class="ar">{{item.termekara}} Ft</div>
+            </div>
+        </div>
     </div>
   </main>

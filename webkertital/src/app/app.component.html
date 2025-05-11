@@ -14,8 +14,8 @@
                     <div class="searching-bar">
                         <mat-form-field class="form-search" appearance="outline">
                             <mat-label>Keresés</mat-label>
-                            <input matInput type="search"/>
-                            <button class="keresogomb" mat-icon-button matSuffix (click)="kereses()">
+                            <input matInput #searchInput placeholder="Keresés..."/>
+                            <button class="keresogomb" mat-icon-button matSuffix (click)="kereses(searchInput.value)">
                                 <mat-icon style="font-size: 24px;">search</mat-icon>
                             </button>
                         </mat-form-field>
@@ -54,11 +54,11 @@
                 </div>
                 <div class="cart-header">
                     <a mat-list-item routerLink="/kosar" routerLinkActive="activate-list-item">
-                        @if(isLoggedIn() && updateKosarMennyiseg() > 0){
+                        <!--@if(isLoggedIn() && updateKosarMennyiseg() > 0){
                             <mat-icon matBadge="{{updateKosarMennyiseg()}}" matBadgeColor="accent" class="large-icon" aria-hidden="false">shopping_bag</mat-icon>
                         }@else {
                             <mat-icon matBadgeColor="accent" class="large-icon" aria-hidden="false">shopping_bag</mat-icon>
-                        }
+                    }-->
                     </a>
                 </div>
                 @if(isAdmin()){

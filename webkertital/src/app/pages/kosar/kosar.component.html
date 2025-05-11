@@ -8,7 +8,7 @@
             </div>
         </div>
     }@else {
-        @for (mennyi of mennyitermek; track $index) {
+        <!--@for (mennyi of mennyitermek; track $index) {-->
             @if(isKosarUres()){
                 <div class="hibasvalami">
                     <div class="azthiszemez">
@@ -40,8 +40,8 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <input type="number" [(ngModel)]="item.mennyi" (change)="updateKosar(item.id, item.mennyi)" min="0">
-                                    <button mat-flat-button hidden (click)="updateKosar(item.id, item.mennyi)"></button>
+                                    <!--<input type="number" [(ngModel)]="item.mennyi" (change)="updateKosar(item.id, item.mennyi)" min="0">
+                                    <button mat-flat-button hidden (click)="updateKosar(item.id, item.mennyi)"></button> -->
                                 </td>
                                 <td>{{getTermekId(item.id)?.termekara * item.mennyi}} Ft</td>
                             </tr>
@@ -69,6 +69,6 @@
         }
         
             
-    }
+    <!--}-->
             
 </main>

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { FelhasznalokObject } from '../models/felhasznalok';
 import { BehaviorSubject } from 'rxjs';
 import { Observable, of } from 'rxjs';
 
@@ -15,10 +14,10 @@ export class FelhasznaloService {
   private isAdmin: boolean = false;
 
   constructor() {
-    this.loadUser();
+    /*this.loadUser();*/
   }
 
-  private loadUser(): void {
+  /*private loadUser(): void {
     const user = localStorage.getItem('felhasznaloEmail');
     if (user){
       const tarolt = FelhasznalokObject.find(csao => csao.email === user && csao.jelszo === user);
@@ -29,9 +28,9 @@ export class FelhasznaloService {
         this.userSubject.next(this.felhasznalo);
       }
     }
-  }
+  }*/
 
-  getUserId(): any {
+  /*getUserId(): any {
     const felhaszEmail = localStorage.getItem('felhasznaloEmail');
     if(felhaszEmail){
       const adatok = FelhasznalokObject.find(user => user.email === felhaszEmail);
@@ -46,11 +45,11 @@ export class FelhasznaloService {
       return adatok || null;
     }
     return null;
-  }
+  }*/
 
-  getFelhasznalok(): any[] {
+  /*getFelhasznalok(): any[] {
     return FelhasznalokObject;
-  }
+  }*/
 
   setFelhasznalo(ujFelhasznalo: any): void{
     this.felhasznalo = ujFelhasznalo;
@@ -73,7 +72,7 @@ export class FelhasznaloService {
     }
   }*/
 
-  updateFelhasznalo(modositottFelhasznalo: any): void{
+  /*updateFelhasznalo(modositottFelhasznalo: any): void{
     this.felhasznalo = modositottFelhasznalo;
     const index = FelhasznalokObject.findIndex(user => user.email === this.felhasznalo.email);
     if (index !== -1) {
@@ -84,16 +83,16 @@ export class FelhasznaloService {
       this.userSubject.next(this.felhasznalo);
     }
     
-  }
+  }*/
 
-  emailExists(email: string): boolean {
+  /*emailExists(email: string): boolean {
     return FelhasznalokObject.some(user => user.email === email);
-  }
+  }*/
 
-  createFelhasznalo(ujFelhasznalo: any): Observable<any>{
+  /*createFelhasznalo(ujFelhasznalo: any): Observable<any>{
     FelhasznalokObject.push(ujFelhasznalo);
     return of({success: true});
-  }
+  }*/
 
   isLogged(): boolean{
     this.isLoggedIn = localStorage.getItem('bejelentkezve-e') === 'true';

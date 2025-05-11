@@ -9,6 +9,7 @@ import { Router, RouterLink, RouterLinkActive} from '@angular/router';
 import { FelhasznaloService } from '../../shared/services/felhasznalo.service';
 import { Felhasznalo } from '../../shared/models/felhasznalok';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-regisztracio',
@@ -34,7 +35,8 @@ export class RegisztracioComponent {
   constructor(
     private formBuilder: FormBuilder,
     private felhasznaloService: FelhasznaloService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void{
@@ -60,24 +62,47 @@ export class RegisztracioComponent {
         this.regiError = true;
         return;
       }
-      const ujFelhasznalo = new Felhasznalo(Felhasznalo.felhaszId, vezeteknev, keresztnev, email, jelszo, telefonszam, '', false, 'utanvet', 'nem');
-      this.felhasznaloService.createFelhasznalo(ujFelhasznalo).subscribe(
-        (response) => {
-          console.log("Sikeres létrehozás: ", response);
-          setTimeout(() => {
-            this.loading = false;
-            this.router.navigate(['/bejelentkezes']);
-          }, 2000);
-          
-        }
-      );
+
+      const userData: Partial<Felhasznalo> = {
+        vezeteknev: vezeteknev,
+        keresztnev: keresztnev,
+        email: email,
+        telefonszam: telefonszam,
+        szallitasi_adatok: '',
+        admin: false,
+        fizetesi_adatok: 'utanvet',
+        hirlevelsub: 'nem',
+        kosar: [],
+        orders: []
+
+      }
+
+      this.authService.signUp(email, jelszo, userData)
+       .then(userCredential => {
+        console.log("Registration successful: ", userCredential.user);
+        this.authService.updateLoginStatus(true);
+        this.authService.getAdminStatus(userCredential.user.uid).then(isAdmin => {
+          if (isAdmin) {
+            localStorage.setItem('admin-e', 'true');
+          } else {
+            localStorage.setItem('admin-e', 'false');
+          }
+          this.router.navigateByUrl('/fomenu');
+        });
+        
+       })
+        .catch(error => {
+          console.error("Registration error: ", error);
+          this.regiError = true;
+          this.loading = false;
+        });
     } else{
       console.error("Invalid Form");
     }
   }
 
   isLoggedIn(): boolean{
-    return this.felhasznaloService.isLogged();
+    return localStorage.getItem('bejelentkezve-e') === 'true';
   }
 
 }

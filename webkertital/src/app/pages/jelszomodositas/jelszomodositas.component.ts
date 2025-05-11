@@ -18,6 +18,6 @@ export class JelszomodositasComponent {
   ) {}
 
   isLoggedIn(): boolean {
-    return this.felhasznaloService.isLogged();
+    return localStorage.getItem('bejelentkezve-e') === 'true';
   }
 }

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FelhasznaloService } from '../../shared/services/felhasznalo.service';
-import { Felhasznalo, FelhasznalokObject } from '../../shared/models/felhasznalok';
+import { Felhasznalo} from '../../shared/models/felhasznalok';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -9,6 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-profil',
@@ -34,33 +35,35 @@ export class ProfilComponent {
   UresKeresztnev = false;
   UresTelefonszam = false;
   UresEmail = false;
+  @Output() logoutEvent = new EventEmitter<void>();
 
   constructor(
     private felhasznaloService: FelhasznaloService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
   
   ngOnInit(): void{
-    const felhasznalo = this.felhasznaloService.getFelhasznalo();
-    this.profilForm = this.formBuilder.group({
+    /*const felhasznalo = this.felhasznaloService.getFelhasznalo();*/
+    /*this.profilForm = this.formBuilder.group({
       vezeteknev:[ felhasznalo?.vezeteknev || '', Validators.required],
       keresztnev:[ felhasznalo?.keresztnev || '', Validators.required],
       emailcim:[ felhasznalo?.email || '', [Validators.required, Validators.email]],
       telefonszam:[ felhasznalo?.telefonszam || '', Validators.required]
-    })
+    })*/
     
   }
 
   isLoggedIn(): boolean{
-    return this.felhasznaloService.isLogged();
+    return localStorage.getItem('bejelentkezve-e') === 'true';
   }
 
   isAdmin(): boolean{
-    return this.felhasznaloService.isAdministrator();
+    return localStorage.getItem('admin-e') === 'true';
   }
 
-  getHirlevelsub(): boolean{
+  /*getHirlevelsub(): boolean{
     return this.felhasznaloService.getFelhasznalo()?.hirlevelsub === 'igen';
   }
   getSzallitasiAdatok(): any | null{
@@ -76,25 +79,25 @@ export class ProfilComponent {
       this.router.navigate(['/profil']);
 
     }
-  }
-  HirlevelHozzaad(): void{
+  }*/
+  /*HirlevelHozzaad(): void{
     const felhasznalo = this.felhasznaloService.getFelhasznalo();
     if(felhasznalo){
       this.felhasznaloService.updateFelhasznalo({ ...felhasznalo, hirlevelsub: 'igen' });
       this.router.navigate(['/profil']);
 
     }
-  }
+  }*/
   updatePassword(): void{
     this.router.navigate(['/jelszomodositas']);
   }
-  SzallitasEltavolit(): void{
+  /*SzallitasEltavolit(): void{
     const felhasznalo = this.felhasznaloService.getFelhasznalo();
     if(felhasznalo){
       this.felhasznaloService.updateFelhasznalo({ ...felhasznalo, szallitasi_adatok: '' });
       this.router.navigate(['/profil']);
     }
-  }
+  }*/
   
   SzallitasHozzaad(): void {
     this.router.navigate(['/szallitasiadatok']);
@@ -107,7 +110,7 @@ export class ProfilComponent {
   }*/
 
   //Következő mérföldkőben!!!
-  updateProfile(): void {
+  /*updateProfile(): void {
     if(this.profilForm.valid){
       const { vezeteknev, keresztnev, emailcim, telefonszam } = this.profilForm.value;
       this.felhasznaloService.updateFelhasznalo({ vezeteknev, keresztnev, emailcim, telefonszam });
@@ -115,11 +118,12 @@ export class ProfilComponent {
     }else{
       return;
     }
-  }
+  }*/
   
   kijelentkezes(): void{
-    localStorage.clear();
-    this.router.navigate(['/fomenu']);
+    this.authService.signOut().then(() => {
+      this.logoutEvent.emit();
+    })
   }
   //Következő mérföldkőben!!!
   /*deleteAccount(): void{

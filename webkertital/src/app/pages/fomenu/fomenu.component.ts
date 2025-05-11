@@ -1,23 +1,23 @@
-import { Component } from '@angular/core';
-import { Termek, TermekekObject } from '../../shared/models/termekek';
-import { Felhasznalo, FelhasznalokObject } from '../../shared/models/felhasznalok';
+import { Component, OnInit, NgModule} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Termek} from '../../shared/models/termekek';
+import { Felhasznalo} from '../../shared/models/felhasznalok';
 import { FelhasznaloService } from '../../shared/services/felhasznalo.service';
 import { MatButtonModule } from '@angular/material/button';
-import { Kosar, KosarObject } from '../../shared/models/kosar';
+import { Kosar} from '../../shared/models/kosar';
 import { KosarService } from '../../shared/services/kosar.service';
 import { TermekekService } from '../../shared/services/termekek.service';
 
 @Component({
   selector: 'app-fomenu',
   imports: [
-    MatButtonModule
+    MatButtonModule,
+    CommonModule
   ],
   templateUrl: './fomenu.component.html',
   styleUrl: './fomenu.component.scss'
 })
-export class FomenuComponent {
-  TermekekObject = TermekekObject;
-  FelhasznalokObject = FelhasznalokObject;
+export class FomenuComponent implements OnInit{
   termekek: any[] = [];
 
   constructor(
@@ -27,11 +27,21 @@ export class FomenuComponent {
 
   ) { }
 
+  ngOnInit(): void {
+    this.termekekService.getRandomProducts()
+     .then(products => {
+        this.termekek = products;
+        console.log(this.termekek);
+     })
+     .catch(error => {
+        console.error('Hiba a termékek betöltésekor:', error);
+     });
+  }
 
   isLoggedIn(): boolean {
-    return this.felhasznaloService.isLogged();
+    return localStorage.getItem('bejelentkezve-e') === 'true';
   }
-  addToCart(termekId: number): void {
+  /*addToCart(termekId: number): void {
     const userId = this.felhasznaloService.getUserId();
   
     // Ellenőrizzük, hogy a termék már szerepel-e a kosárban
@@ -57,10 +67,10 @@ export class FomenuComponent {
   
     // Frissítjük a kosár mennyiségét
     this.updateKosarMennyiseg();
-  }
-  updateKosarMennyiseg(): number {
+  }*/
+  /*updateKosarMennyiseg(): number {
     const userId = this.felhasznaloService.getUserId();
     const userKosar = KosarObject.filter(item => item.user_id === userId);
     return userKosar.reduce((osszeg, item) => osszeg + item.mennyi, 0);
-  }
+  }*/
 }

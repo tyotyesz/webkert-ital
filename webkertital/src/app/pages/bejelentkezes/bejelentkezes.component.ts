@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms'
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
+import { AuthService } from '../../shared/services/auth.service';
 
 
 
@@ -31,7 +32,8 @@ export class BejelentkezesComponent {
   constructor(
     private formBuilder: FormBuilder,
     private felhasznaloServie: FelhasznaloService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void{
@@ -48,22 +50,31 @@ export class BejelentkezesComponent {
   login(): void{
     if(this.loginForm.valid){
       const {email, jelszo} = this.loginForm.value;
-      for(let i = 0; i < this.felhasznaloServie.getFelhasznalok().length; i++){
-        if(this.felhasznaloServie.getFelhasznalok()[i].jelszo == jelszo && this.felhasznaloServie.getFelhasznalok()[i].email == email){
-          this.felhasznaloServie.setFelhasznalo(this.felhasznaloServie.getFelhasznalok()[i]);
-          this.loginForm.reset();
-          this.router.navigate(['/fomenu']);
-          break;
-        }
-      }
-    }else{
-      this.loginError = true;
+      this.authService.signIn(email, jelszo)
+      .then(userCredential => {
+        console.log("Login successful", userCredential.user);
+        this.authService.updateLoginStatus(true);
+        this.authService.getAdminStatus(userCredential.user.uid).then(isAdmin => {
+          if (isAdmin) {
+            localStorage.setItem('admin-e', 'true');
+          } else {
+            localStorage.setItem('admin-e', 'false');
+          }
+          this.router.navigateByUrl('/fomenu');
+        });
+      })
+      .catch(error => {
+        console.error("Login error", error);
+        this.loginError = true;
+      })
       return;
+    }else{
+      console.log("Invalid form", this.loginForm.errors);
     }
   }
 
   isLoggedIn(): boolean{
-    return this.felhasznaloServie.isLogged();
+    return localStorage.getItem('bejelentkezve-e') === 'true';
   }
 
 }

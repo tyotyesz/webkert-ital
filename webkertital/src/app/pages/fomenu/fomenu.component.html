@@ -1,38 +1,15 @@
 <main class="termekek" id="termekek">
     <div class="kiscsavo">
         <fieldset>
-            <legend>Akciós Italaink</legend>
+            <legend>Véletlenszerű Italok</legend>
             <div class="box-container">
-            @for (item of TermekekObject; track $index) {
-                <div class="box">
-                    <img src="{{item.kepeleres}}" alt="{{item.termeknev}}">
-                    <p>{{item.termeknev}}</p>
-                    <span class="elozo-ar">{{item.termekara}} Ft</span>
-                    <span class="akcios-ar">{{item.akciosAr}} Ft</span>
-                    <br>
-                    @if(isLoggedIn()){
-                        <button mat-flat-button class="kosarba-gomb">Kosárba</button>
-                    }
-                </div>
-            }
-            </div>
-        </fieldset>
-    </div>
-    <div class="kiscsavo">
-        <fieldset>
-            <legend>Felkapott Italok</legend>
-            <div class="box-container">
-                @for (item of TermekekObject; track $index) {
-                    <div class="box">
-                        <img src="{{item.kepeleres}}" alt="{{item.termeknev}}">
-                        <p>{{item.termeknev}}</p>
-                        <span class="akcios-ar">{{item.termekara}} Ft</span>
+                    <div class="box" *ngFor="let item of termekek; let i = index">
+                        <img [src]="item.kepeleres" [alt]="item.termeknev">
+                        <p>{{ item.termeknev }}</p>
+                        <span class="akcios-ar">{{ item.termekara }} Ft</span>
                         <br>
-                        @if(isLoggedIn()){
-                            <button mat-flat-button class="kosarba-gomb">Kosárba</button>
-                        }
+                        <button *ngIf="isLoggedIn()" mat-flat-button class="kosarba-gomb">Kosárba</button>
                     </div>
-                }
             </div>
         </fieldset>
     </div>

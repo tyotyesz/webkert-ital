@@ -1,46 +1,225 @@
-.azthiszemez {
-    width: 330px;
-    padding: 2rem 1rem;
-    margin-top: 50px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 50px;
-    background-color: #003366;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
-    font-family: 'Montserrat', sans-serif;
-}
-.azthiszemez a{
-    color: white;
-    text-decoration: none;
-}
-.azthiszemez a:hover{
-    text-decoration: underline;
-}
-.azthiszemez ::placeholder{
-    font-family: 'Montserrat', sans-serif;
-}
-.azthiszemez h2{
-    font-size: 2rem;
-    color: #ff9966;
-    margin-bottom: 1.2rem;
-    font-family: 'Montserrat', sans-serif;
-    margin-top: 0;
-    text-align: center;
-}
-.azthiszemez p{
-    font-size: 1rem;
-    color: white;
-    margin-bottom: 1.2rem;
-    font-family: 'Montserrat', sans-serif;
-    text-align: center;
-}
-@media(max-width: 768px){
-    .azthiszemez{
-        margin-top: 0;
+@media (max-width: 992px) {
+    .alkeszitalok .box-container .box {
+        flex-basis: calc(50% - 2rem);
     }
-    .hibasvalami{
-        padding-top: 184px;
+    
+}
+
+@media (max-width: 768px) {
+    .alkeszitalok .box-container .box {
+        flex-basis: calc(33.33% - 2rem);
+    }
+    .alkeszitalok{
+        padding-top: 166px;
+    }
+    .alkeszitalok .box-container{
+        z-index: 1;
+    }
+    .alkeszitalok .box-container .box .italok h3{
+        font-size: 0.5rem;
+    }
+    
+    .alkeszitalok .box-container .box .italok .ar{
+        font-size: 1.5rem;
+    
+    }
+}
+
+@media (max-width: 576px) {
+    .alkeszitalok .box-container .box {
+        flex-basis: calc(100% - 2rem);
+    }
+    
+}
+header{
+    z-index: 1000;
+}
+.alkeszitalok .box-container{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    gap: 1.5rem;
+    align-items: flex-start;
+    width: 100%;
+    box-shadow: 0 1rem 1rem rgb(255, 255, 255);
+    background-color: transparent;
+}
+
+
+
+.alkeszitalok .box-container .box {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: calc(33.33% - 2rem);
+    box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.4);
+    border-radius: .5rem;
+    border: .1rem solid rgba(0, 0, 0, .1);
+    position: relative;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.alkeszitalok .box-container .box:hover {
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.6);
+}
+
+.alkeszitalok .box-container .box .kep {
+    position: relative;
+    text-align: center;
+    padding-top: 2rem;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.alkeszitalok .box-container .box .kep img {
+    height: auto;
+    max-width: 100%;
+    min-width: 40%;
+    transition: transform 0.3s ease;
+    display: block;
+    margin: 0 auto;
+}
+
+.alkeszitalok .box-container .box:hover .kep img {
+    transform: scale(1.3);
+}
+
+.alkeszitalok .box-container .box .kep .icon {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    width: 100%;
+}
+
+.alkeszitalok .box-container .box:hover .kep .icon {
+    opacity: 1;
+}
+
+.alkeszitalok .box-container .box .kep .icon button {
+    height: 5rem;
+    line-height: 5rem;
+    font-size: 2rem;
+    width: 100%;
+    border-radius: 5%;
+    background: grey;
+    color: #fff;
+    transition: background-color 0.3s ease;
+    border: none;
+    cursor: pointer;
+    
+}
+
+.alkeszitalok .box-container .box .kep .icon .cart-btn {
+    border-left: .1rem solid rgb(255, 255, 255);
+    border-right: .1rem solid rgb(255, 255, 255);
+    width: 100%;
+}
+
+.alkeszitalok .box-container .box .kep .icon button:hover {
+    background: black;
+}
+
+.alkeszitalok .box-container .box .italok {
+    padding: 2rem;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.alkeszitalok .box-container .box:hover .italok{
+    opacity: 1;
+}
+
+.alkeszitalok .box-container .box .italok h3{
+    font-size: 1.5rem;
+    color: #003366;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bolder;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.alkeszitalok .box-container .box .italok .ar{
+    font-size: 2.5rem;
+    color: #ff9966;
+    font-weight: bolder;
+    padding-top: 1rem;
+    font-family: 'Montserrat', sans-serif;
+
+}
+
+.heading{
+    text-align: center;
+    font-size: 4rem;
+    padding: 1rem;
+    margin: 2rem 0;
+    background-color: rgb(0, 0, 0);
+    border-radius: 25px;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+}
+
+.heading span{
+    color:#ff9966;
+}
+
+main{
+    padding: 2rem 9%;
+}
+@media (max-width: 992px) {
+    .alkeszitalok .box-container .box {
+        flex-basis: calc(50% - 2rem);
+    }
+    
+}
+
+@media (max-width: 768px) {
+    .alkeszitalok .box-container .box {
+        flex-basis: calc(33.33% - 2rem);
+    }
+    .alkeszitalok{
+        padding-top: 166px;
+    }
+    .alkeszitalok .box-container{
+        z-index: 1;
+        
+    }
+    .alkeszitalok .box-container .box .italok h3{
+        font-size: 1.0rem;
+    }
+    
+    .alkeszitalok .box-container .box .italok .ar{
+        font-size: 2.0rem;
+    
+    }
+    .alkeszitalok .box-container .box .kep .icon button {
+        height: 2rem;
+        line-height: 2rem;
+        font-size: 1rem;
+    }
+    .heading{
+        font-size: 2rem;
+    }
+}
+@media (max-width: 576px) {
+    .alkeszitalok .box-container .box {
+        flex-basis: calc(100% - 2rem);
+    }
+    .alkeszitalok .box-container{
+        display: block;
+    }
+    .alkeszitalok .box-container .box .kep .icon button {
+        height: 5rem;
+        line-height: 2rem;
+        font-size: 2rem;
     }
 }

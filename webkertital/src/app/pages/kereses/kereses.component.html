@@ -1,10 +1,17 @@
-<main>
-    <div class="hibasvalami">
-        <div class="azthiszemez">
-            <h2>Készítés alatt!</h2>
-            <p>A keresés a következő mérföldkőben működni fog! :D</p>
-            <br>
-            <a mat-list-module routerLink="/fomenu" routerLinkActive="activate-list-item">Kattints ide a főoldalhoz!</a>   
+<main class="alkeszitalok" id="alkeszitalok">
+    <h1 class="heading">Keresett <span> találatok</span></h1>
+      <div class="box-container">
+        <div class="box" *ngFor="let item of results">
+            <div class="kep">
+                <img mat-card-image [src]="item.kepeleres" [alt]="item.termeknev">
+                <div class="icon" *ngIf="isLoggedIn()">
+                    <button mat-mini-fab><mat-icon>shopping_basket</mat-icon></button>
+                </div>
+            </div>
+            <div class="italok">
+                <h3>{{item.termeknev}}</h3>
+                <div class="ar">{{item.termekara}} Ft</div>
+            </div>
         </div>
     </div>
 </main>
