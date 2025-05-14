@@ -1,6 +1,10 @@
 <main class="alkeszitalok" id="alkeszitalok">
     <h1 class="heading">Keresett <span> találatok</span></h1>
-      <div class="box-container">
+        <div style="text-align: center;" *ngIf="results.length === 0">
+            <h1>Sajnos nincs találat!</h1>
+        </div>
+      <div class="box-container" *ngIf="results.length > 0">
+        
         <div class="box" *ngFor="let item of results">
             <div class="kep">
                 <img mat-card-image [src]="item.kepeleres" [alt]="item.termeknev">

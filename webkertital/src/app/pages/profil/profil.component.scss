@@ -34,6 +34,13 @@ h2{
     font-family: 'Montserrat', sans-serif;
     text-align: left;
 }
+.pass-box{
+    font-size: 2rem;
+    color: #ff9966;
+    margin-bottom: 1.2rem;
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+}
 .szokoz{
     margin-top: 1.5rem;
 
@@ -172,6 +179,14 @@ h2{
     margin-bottom: 1.2rem;
     font-family: 'Montserrat', sans-serif;
     text-align: center;
+}
+.sneci mat-form-field{
+    display: block;
+    width: 300px;
+    margin-bottom: 16px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
 }
 @media(max-width: 768px){
     .wrapper{

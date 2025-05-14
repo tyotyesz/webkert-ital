@@ -1,11 +1,11 @@
-<main>
-    @if(isLoggedIn()){
+<main *ngIf="currentUserData">
+    @if(isLoggedIn() && !fiokTorles && !jelszoFrissites){
         <div class="bejeli">
             <div class="wrapper">
                 <h2>Személyes adatok</h2>
                     <hr>
                 <div class="szokoz">
-                    <form [formGroup]="profilForm" > <!-- updateProfile() kell -->
+                    <form [formGroup]="profilForm" (ngSubmit)="updateProfile()" > 
                         <mat-form-field appearance="outline">
                             <mat-label>Vezetéknév</mat-label>
                             <input matInput type="text" formControlName="vezeteknev"/>
@@ -21,36 +21,34 @@
                             }
                         </mat-form-field>
                         <mat-form-field appearance="outline">
-                            <mat-label>E-mail cím</mat-label>
-                            <input matInput type="email" formControlName="emailcim" />
-                            @if(UresEmail){
-                                <mat-error>Ez az email cím már foglalt!</mat-error>
-                            }
-                        </mat-form-field>
-                        <mat-form-field appearance="outline">
                             <mat-label>Telefonszám</mat-label>
                             <input matInput type="text" formControlName="telefonszam" />
                         </mat-form-field>
                         <div class="gomb">
-                            <button mat-flat-button style="background-color: grey;">Módosítás</button>
+                            <button mat-flat-button >Módosítás</button>
                         </div>
                     </form>
                         <hr>
                         <div class="szallitasi-adatok">
+                            <h3>Email-cím: {{currentUserData?.email}}</h3>
+                        </div>
+                        <hr>
+                        <div class="szallitasi-adatok">
                             <h3>
                                 <div class="hirlevel-container">
-                                    Jelszó módosítása <button mat-flat-button (click)="updatePassword()">Módosítás</button>
+                                    Jelszó módosítása <button mat-flat-button (click)="showUpdatePassword()">Módosítás</button>
                                 </div>
                             </h3>
                         </div>
                         <div class="szallitasi-adatok">
                             <h3>
                                 <div class="hirlevel-container">
-                                    <!--@if(getHirlevelsub()){
+                                    <ng-container *ngIf="getHirlevelsub(); else notSubscribed">
                                         Hírlevélre feliratkozva<button mat-flat-button (click)="HirlevelEltavolit()">Eltávolítás</button>
-                                    }@else {
+                                    </ng-container>
+                                    <ng-template #notSubscribed>
                                         Hírlevél feliratkozás<button mat-flat-button (click)="HirlevelHozzaad()">Feliratkozás</button>
-                                }-->
+                                    </ng-template>
                                 </div>
                             </h3>
                         </div>
@@ -86,21 +84,59 @@
                         <hr>
                         <div class="kijelentkezes">
                             <button class="kijelibutton" mat-flat-button (click)="kijelentkezes()">Kijelentkezés</button>
-                            <!--@if(!isAdmin()){
-                                <button class="kijelibutton" mat-flat-button (click)="deleteAccount()">Fiók törlése</button>
-                        }-->
+                        </div>
+                        <div *ngIf="!isAdmin()" class="kijelentkezes">
+                            <button class="kijelibutton" mat-flat-button (click)="showDeleteAccount()">Fiók törlése</button>
                         </div>
                 </div>
             </div>
         </div>
     }
-    @else {
+    @else if(!isLoggedIn() && !fiokTorles && !jelszoFrissites) {
         <div class="hibasvalami">
             <div class="azthiszemez">
                 <h2>Hoppáré!</h2>
                 <p>Hogyha meg szeretnéd tekinteni a fiókod, akkor jelentkezzen be!</p>
                 <br>
                 <a mat-list-item routerLink="/bejelentkezes" routerLinkActive="activate-list-item">Kattints ide a bejelentkezéshez!</a>
+            </div>
+        </div>
+    }@else if(isLoggedIn() && fiokTorles && !jelszoFrissites ){
+        <div class="bejeli">
+            <div class="wrapper">
+                <h3 class="pass-box">Adja meg a jelszavát a törléshez!</h3>
+                <mat-form-field appearance="outline">
+                    <mat-label>Jelszó</mat-label>
+                    <input matInput type="password" [(ngModel)]="veglegesJelszo" required />
+                </mat-form-field>
+                <div class="kijelentkezes">
+                    <button class="kijelibutton" mat-flat-button (click)="deleteAccount()">Törlés</button>
+                </div>
+                <div class="kijelentkezes">
+                    <button class="kijelibutton" mat-flat-button (click)="fiokTorles = false">Mégse</button>
+                </div>
+            </div>
+        </div>
+    }@else if(isLoggedIn() && !fiokTorles && jelszoFrissites){
+        <div class="bejeli">
+            <div class="wrapper">
+                <h3 class="pass-box">Adja meg a jelszavát és előző jelszavát a módosításhoz!</h3>
+                <div class="sneci">
+                    <mat-form-field appearance="outline">
+                    <mat-label>Régi jelszó</mat-label>
+                    <input matInput type="password" [(ngModel)]="oldPass" required />
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Új jelszó</mat-label>
+                    <input matInput type="password" [(ngModel)]="newPass" required />
+                </mat-form-field>
+                </div>
+                <div class="kijelentkezes">
+                    <button class="kijelibutton" mat-flat-button (click)="updatePassword()">Módosítás</button>
+                </div>
+                <div class="kijelentkezes">
+                    <button class="kijelibutton" mat-flat-button (click)="jelszoFrissites = false">Mégse</button>
+                </div>
             </div>
         </div>
     }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, signOut, authState, User as FirebaseUser, UserCredential, createUserWithEmailAndPassword } from '@angular/fire/auth';
-import { collection, doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
+import { Auth, signInWithEmailAndPassword, signOut, authState, User as FirebaseUser, UserCredential, createUserWithEmailAndPassword, EmailAuthProvider, reauthenticateWithCredential, updateEmail, updatePassword } from '@angular/fire/auth';
+import { collection, deleteDoc, doc, Firestore, getDoc, getDocs, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Felhasznalo } from '../models/felhasznalok';
@@ -79,6 +79,85 @@ export class AuthService {
     } catch (error) {
       console.error("Error fetching user data:", error);
       return false;
+    }
+  }
+  async reauthenticateUser(password: string): Promise<void> {
+    const user = this.auth.currentUser;
+    if(!user || !user.email) {
+      console.error("No user is currently signed in.");
+      throw new Error("No user is currently signed in.");
+    }
+
+    const credential = EmailAuthProvider.credential(user.email, password);
+    await reauthenticateWithCredential(user, credential)
+
+  }
+
+  async updatePassword(newPassword: string): Promise<void> {
+    const user = this.auth.currentUser;
+    if(!user) {
+      throw new Error("User is not signed in.");
+    }
+
+    await updatePassword(user, newPassword);
+  }
+
+  async deleteAccount(password: string): Promise<void> {
+    const user = this.auth.currentUser;
+    if(user) {
+      try{
+        const credential = await EmailAuthProvider.credential(user.email!, password);
+        await reauthenticateWithCredential(user, credential);
+
+
+        const userDocRef = doc(this.firestore, 'Users', user.uid);
+        await deleteDoc(userDocRef);
+
+        await user.delete();
+
+        console.log("Account deleted successfully");
+      }catch (error) {
+        console.error("Error deleting account:", error);
+        throw error;
+      }
+      
+
+    }else {
+      console.error("No user is currently signed in.");
+      throw new Error("No user is currently signed in.");
+    }
+  }
+
+  async getUserData(): Promise<any> {
+    const user = this.auth.currentUser;
+    if(user) {
+      const userDocRef = doc(this.firestore, 'Users', user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+
+      if(userDocSnap.exists()) {
+        return userDocSnap.data();
+      } else {
+        console.error("No such user document!");
+        return null;
+      }
+    } else {
+      console.error("No user is currently signed in.");
+      return null;
+    }
+  }
+  onAuthStateChanged(callback: (user: any) => void): void {
+    this.auth.onAuthStateChanged(callback);
+  }
+
+  async updateUserData(updatedData: Partial<Felhasznalo>): Promise<void> {
+    const user = this.auth.currentUser;
+    if(user) {
+      const userDocRef = doc(this.firestore, 'Users', user.uid);
+      await updateDoc(userDocRef, updatedData);
+      console.log("User data updated successfully");
+    } else {
+      console.error("No user is currently signed in.");
+      throw new Error("No user is currently signed in.");
     }
   }
 }
