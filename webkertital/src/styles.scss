@@ -6,17 +6,17 @@ app-igazolas{
         filled-label-text-color: #000000
     ));
 }
-app-fomenu{
+app-alkoholos, app-uditok, app-kulonleges, app-fomenu{
     @include mat.button-overrides((
-        filled-container-color: grey,
+        filled-container-color: #ff9966,
         filled-label-text-color: white
     ));
 }
-app-alkoholos, app-uditok, app-kulonleges, app-admin{
+app-admin{
     @include mat.button-overrides((
-        filled-container-color: grey,
+        filled-container-color: #ff9966,
         filled-label-text-color: white
-    ));
+    ))
 }
 app-root{
     @include mat.form-field-overrides((

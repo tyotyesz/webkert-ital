@@ -8,7 +8,7 @@
                         <p>{{ item.termeknev }}</p>
                         <span class="akcios-ar">{{ item.termekara }} Ft</span>
                         <br>
-                        <button *ngIf="isLoggedIn()" mat-flat-button class="kosarba-gomb">Kosárba</button>
+                        <button *ngIf="isLoggedIn()" mat-flat-button class="kosarba-gomb" (click)="addToCart(item)" >Kosárba</button>
                     </div>
             </div>
         </fieldset>

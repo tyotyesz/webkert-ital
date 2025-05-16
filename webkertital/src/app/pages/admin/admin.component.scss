@@ -132,6 +132,25 @@ select{
     text-align: center;
     
 }
+.erase-button{
+    font-size: 1rem;
+    margin-top: 1.8rem;
+    margin-bottom: 1.8rem;
+    padding: 10px 0;
+    border-radius: 20px;
+    outline: none;
+    border: none;
+    width: 80px;
+    color: #fff;
+    cursor: pointer;
+    background: #ff9966;
+    font-family: 'Montserrat', sans-serif;
+    transition: 0.3s;
+    text-align: center;
+}
+.erase-button:hover{
+    background: rgba(17, 107, 143, 0.877);
+}
 .bejeli .wrapper .szokoz form button:hover{
     background: rgba(17, 107, 143, 0.877);
 }

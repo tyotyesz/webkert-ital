@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { AuthService } from '../../shared/services/auth.service';
+import { AppComponent } from '../../app.component';
 
 
 
@@ -33,7 +34,8 @@ export class BejelentkezesComponent {
     private formBuilder: FormBuilder,
     private felhasznaloServie: FelhasznaloService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    public appcomponent: AppComponent
   ) {}
 
   ngOnInit(): void{
@@ -60,6 +62,7 @@ export class BejelentkezesComponent {
           } else {
             localStorage.setItem('admin-e', 'false');
           }
+          this.appcomponent.updateKosarMennyiseg();
           this.router.navigateByUrl('/fomenu');
         });
       })

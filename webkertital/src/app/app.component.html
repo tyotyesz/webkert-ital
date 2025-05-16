@@ -1,4 +1,4 @@
-@if(isFomenuRoute()){
+@if(isFomenuRoute() && currentUserData){
 <header>
     <div class="header-kozepen">
         <div class="header-valami">
@@ -54,11 +54,8 @@
                 </div>
                 <div class="cart-header">
                     <a mat-list-item routerLink="/kosar" routerLinkActive="activate-list-item">
-                        <!--@if(isLoggedIn() && updateKosarMennyiseg() > 0){
-                            <mat-icon matBadge="{{updateKosarMennyiseg()}}" matBadgeColor="accent" class="large-icon" aria-hidden="false">shopping_bag</mat-icon>
-                        }@else {
-                            <mat-icon matBadgeColor="accent" class="large-icon" aria-hidden="false">shopping_bag</mat-icon>
-                    }-->
+                            <mat-icon *ngIf="isLoggedIn() && kosarMennyiseg > 0" matBadge="{{kosarMennyiseg}}" matBadgeColor="accent" class="large-icon" aria-hidden="false">shopping_bag</mat-icon>
+                            <mat-icon *ngIf="!isLoggedIn() || kosarMennyiseg === 0" matBadgeColor="accent" class="large-icon" aria-hidden="false">shopping_bag</mat-icon>
                     </a>
                 </div>
                 @if(isAdmin()){
@@ -81,7 +78,7 @@
     </div>
 </nav>}
 <router-outlet/>
-@if(isFomenuRoute()){
+@if(isFomenuRoute() && currentUserData){
 <footer class="footer">
     <div class="footer-container">
         <div class="row">

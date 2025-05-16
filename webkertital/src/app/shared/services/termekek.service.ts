@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, getDocs, query, where } from '@angular/fire/firestore';
+import { Firestore, collection, getDocs, query, where, doc, deleteDoc, addDoc } from '@angular/fire/firestore';
 
 
 @Injectable({
@@ -49,6 +49,28 @@ export class TermekekService {
       return products;
     } catch (error) {
       console.error("Error fetching products by category:", error);
+      throw error;
+    }
+  }
+
+  async deleteProduct(productId: string): Promise<void> {
+    try{
+      const productDocRef = doc(this.firestore, "Termekek", productId);
+      await deleteDoc(productDocRef);
+      console.log("Product deleted successfully");
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      throw error;
+    }
+  }
+
+  async addProduct(product: any): Promise<void> {
+    try{
+      const termekekCollection = collection(this.firestore, "Termekek");
+      await addDoc(termekekCollection, product);
+      console.log("Product added successfully");
+    } catch (error) {
+      console.error("Error adding product:", error);
       throw error;
     }
   }

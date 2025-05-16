@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive} from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,6 +11,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatBadgeModule} from '@angular/material/badge';
 import { KosarService } from './shared/services/kosar.service';
 import { KosarmennyisegService } from './shared/services/kosarmennyiseg.service';
+import { AuthService } from './shared/services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +24,8 @@ import { KosarmennyisegService } from './shared/services/kosarmennyiseg.service'
     MatFormFieldModule,
     MatInputModule,
     MatCardModule,
-    MatBadgeModule
+    MatBadgeModule,
+    CommonModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
@@ -31,15 +34,22 @@ export class AppComponent {
   title(title: any) {
     throw new Error('Method not implemented.');
   }
+  kosarMennyiseg: number = 0;
+  currentUserData: any = null;
   constructor(
     private router: Router, 
     private felhasznaloService: FelhasznaloService, 
     private kosarService: KosarService,
-    private kosarmennyisegService: KosarmennyisegService
+    private kosarmennyisegService: KosarmennyisegService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    /*this.updateKosarMennyiseg();*/
+    this.updateKosarMennyiseg();
+    this.currentUserData = this.authService.getUserData();
+    this.kosarService.cartChanged.subscribe(() => {
+      this.updateKosarMennyiseg();
+    });
   }
   
   isFomenuRoute(){
@@ -52,16 +62,17 @@ export class AppComponent {
   isAdmin(): boolean {
     return localStorage.getItem('admin-e') === 'true';
   }
-
-  /*updateKosarMennyiseg(): number{
-    const userId = this.felhasznaloService.getUserId();
-    const userKosar = KosarObject.filter(termek => termek.user_id === userId);
-    return userKosar.reduce((osszeg, item) => osszeg + item.mennyi, 0);
-  }*/
   kereses(query: string): void{
     if(query.trim()){
       this.router.navigate(["/kereses", query]);
     }
     
+  }
+  async updateKosarMennyiseg() {
+    if(this.isLoggedIn()) {
+      this.kosarMennyiseg = await this.kosarService.getCartQuantity();
+    }else {
+      this.kosarMennyiseg = 0;
+    }
   }
 }

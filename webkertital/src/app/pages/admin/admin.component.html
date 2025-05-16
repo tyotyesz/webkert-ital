@@ -1,6 +1,5 @@
 <main>
-    @if(isLoggedIn() && isAdmin()){
-        <div class="bejeli">
+        <div class="bejeli" *ngIf="isLoggedIn() && isAdmin(); else otherBlock">
             <div class="wrapper">
                 <h2>Szerkesztői felület</h2>
                 <hr>
@@ -42,37 +41,34 @@
                             <th>Kép</th>
                             <th>Műveletek</th>
                         </tr>
-                        <!--@for (item of termkekObject; track $index) {
-                            <tr>
-                                <td>{{item.termeknev}}</td>
-                                <td>{{item.termekara}}</td>
-                                <td>{{item.kategoria}}</td>
-                                <td><img mat-card-image src="{{item.kepeleres}}" style="width: 100px;" alt="Termék képe"></td>
-                                <td><button mat-flat-button (click)="termekTorles(item.id)">Törlés</button></td>
-                            </tr>
-                        }-->
+                        <tr *ngFor="let termek of pagedProducts">
+                            <td>{{termek.termeknev}}</td>
+                            <td>{{termek.termekara}} Ft</td>
+                            <td>{{getKategoriaLabel(termek.kategoria)}}</td>
+                            <td><img mat-card-image src="{{termek.kepeleres}}" style="width: 100px;" alt="{{termek.termeknev}}"></td>
+                            <td><button class="erase-button" mat-flat-button (click)="termekTorles(termek.id)">Törlés</button></td>
+                        </tr>
                     </table>
-                    <mat-paginator [length]="20" [pageSize]="10" [pageSizeOptions]="[2, 5, 10]" aria-label="Oldal navigáció"></mat-paginator>
+                    <mat-paginator [length]="products.length" [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)" aria-label="Oldal navigáció"></mat-paginator>
                 </div>
             </div>
         </div>
-    }@else if (isLoggedIn() && !isAdmin()) {
-        <div class="hibasvalami">
-            <div class="azthiszemez">
-                <h2>Hoppáré!</h2>
-                <p>Hogy megtekinthesd az oldalt kérjük lépj be az admin fiókba!</p>
-                <br>
-                <a mat-list-item routerLink="/profil" routerLinkActive="activate-list-item">Kattints ide a profilhoz!</a>
+        <ng-template #otherBlock>
+            <div class="hibasvalami" *ngIf="isLoggedIn() && !isAdmin()">
+                <div class="azthiszemez">
+                    <h2>Hoppáré!</h2>
+                    <p>Hogy megtekinthesd az oldalt kérjük lépj be az admin fiókba!</p>
+                    <br>
+                    <a mat-list-item routerLink="/profil" routerLinkActive="activate-list-item">Kattints ide a profilhoz!</a>
+                </div>
             </div>
-        </div>
-    }@else {
-        <div class="hibasvalami">
-            <div class="azthiszemez">
-                <h2>Hoppáré!</h2>
-                <p>Hogy megtekinthesd az oldalt kérjük lépj be az admin fiókba!</p>
-                <br>
-                <a mat-list-item routerLink="/bejelentkezes" routerLinkActive="activate-list-item">Kattints ide a bejelentkezéshez!</a>
+            <div class="hibasvalami" *ngIf="!isLoggedIn() && !isAdmin()">
+                <div class="azthiszemez">
+                    <h2>Hoppáré!</h2>
+                    <p>Hogy megtekinthesd az oldalt kérjük lépj be az admin fiókba!</p>
+                    <br>
+                    <a mat-list-item routerLink="/bejelentkezes" routerLinkActive="activate-list-item">Kattints ide a bejelentkezéshez!</a>
+                </div>
             </div>
-        </div>
-    }
+        </ng-template>
 </main>

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FelhasznaloService } from '../../shared/services/felhasznalo.service';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, Validators} from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,7 +9,8 @@ import {MatSelectModule} from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { Router, RouterLinkActive, RouterLink } from '@angular/router';
 import { MatListItem } from '@angular/material/list';
-import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
+import { TermekekService } from '../../shared/services/termekek.service';
 
 @Component({
   selector: 'app-admin',
@@ -24,22 +25,29 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MatListItem,
     RouterLink,
     RouterLinkActive,
-    MatPaginatorModule
+    MatPaginatorModule,
+    CommonModule
   ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss'
 })
-export class AdminComponent {
+export class AdminComponent implements OnInit{
 
   adminForm!: FormGroup;
+  products: any[] = [];
+  pagedProducts: any[] = [];
+  pageSize: number = 5;
+  pageIndex: number = 0;
+  pageSizeOptions: number[] = [5, 10, 20];
   constructor(
-    private felhasznaloService: FelhasznaloService,
+    private termekekService: TermekekService,
     private formBuilder: FormBuilder,
     private router: Router
   ) {}
 
   ngOnInit(): void{
     this.inic();
+    this.loadProducts();
   }
 
   inic(){
@@ -48,6 +56,26 @@ export class AdminComponent {
       termekara:['', Validators.required],
       kategoria:['', Validators.required],
     });
+  }
+  async loadProducts() {
+    try {
+      this.products = await this.termekekService.getAllProducts();
+      this.updatePagedProducts();
+    } catch (error) {
+      console.error("Error loading products:", error);
+    }
+  }
+
+  updatePagedProducts(){
+    const start = this.pageIndex * this.pageSize;
+    const end = start + this.pageSize;
+    this.pagedProducts = this.products.slice(start, end);
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.updatePagedProducts();
   }
 
   isLoggedIn(): boolean {
@@ -63,7 +91,21 @@ export class AdminComponent {
       const{termeknev, termekara, kategoria} = this.adminForm.value; 
     }
   }
-  termekTorles(termekId: number): void{
-
+  async termekTorles(termekId: string): Promise<void>{
+    try{
+      await this.termekekService.deleteProduct(termekId);
+      await this.loadProducts();
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      throw error;
+    }
   }
+  getKategoriaLabel(kategoria: string): string {
+  switch (kategoria) {
+    case 'uditok': return 'Üdítők';
+    case 'alkoholos': return 'Alkoholos';
+    case 'kulonleges': return 'Különleges';
+    default: return kategoria;
+  }
+}
 }

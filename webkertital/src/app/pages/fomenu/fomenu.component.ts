@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Kosar} from '../../shared/models/kosar';
 import { KosarService } from '../../shared/services/kosar.service';
 import { TermekekService } from '../../shared/services/termekek.service';
+import { AppComponent } from '../../app.component';
 
 @Component({
   selector: 'app-fomenu',
@@ -21,9 +22,9 @@ export class FomenuComponent implements OnInit{
   termekek: any[] = [];
 
   constructor(
-    private felhasznaloService: FelhasznaloService,
     private kosarService: KosarService,
     private termekekService: TermekekService,
+    public appcomponent: AppComponent
 
   ) { }
 
@@ -41,36 +42,17 @@ export class FomenuComponent implements OnInit{
   isLoggedIn(): boolean {
     return localStorage.getItem('bejelentkezve-e') === 'true';
   }
-  /*addToCart(termekId: number): void {
-    const userId = this.felhasznaloService.getUserId();
-  
-    // Ellenőrizzük, hogy a termék már szerepel-e a kosárban
-    const index = KosarObject.findIndex(item => item.productsid === termekId && item.user_id === userId);
-  
-    if (index !== -1) {
-      // Ha már szerepel, növeljük a mennyiségét
-      KosarObject[index].mennyi += 1;
-      console.log(`Termék ID: ${termekId} mennyisége növelve. Új mennyiség: ${KosarObject[index].mennyi}`);
-    } else {
-      // Ha még nem szerepel, létrehozzuk az új terméket a kosárban
-      KosarObject.push({
-        id: Kosar.kosarId++,
-        mennyi: 1,
-        user_id: userId,
-        productsid: termekId,
-      });
-      console.log(this.termekekService.getTermekekById(termekId));
-    }
 
-    this.termekek = KosarObject.filter(termek => termek.user_id === userId);
-    console.log(this.termekek);
+  addToCart(product: any): void {
+    this.appcomponent.kosarMennyiseg += 1;
+    this.kosarService.addToCart(product.id)
+      .then(() => {
+        console.log('Termék hozzáadva a kosárhoz:', product);
+      })
+      .catch(error => {
+        this.appcomponent.kosarMennyiseg -= 1;
+        console.error('Hiba a termék kosárhoz adásakor:', error);
+      });
+  }
   
-    // Frissítjük a kosár mennyiségét
-    this.updateKosarMennyiseg();
-  }*/
-  /*updateKosarMennyiseg(): number {
-    const userId = this.felhasznaloService.getUserId();
-    const userKosar = KosarObject.filter(item => item.user_id === userId);
-    return userKosar.reduce((osszeg, item) => osszeg + item.mennyi, 0);
-  }*/
 }

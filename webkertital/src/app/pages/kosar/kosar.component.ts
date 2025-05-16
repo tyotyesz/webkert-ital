@@ -38,10 +38,16 @@ export class KosarComponent {
 
   ngOnInit(): void{
     /*this.termekek = KosarObject.filter(termek => termek.user_id === this.felhasznaloService.getUserId());*/
-    console.log(this.termekek);
+    this.gettingAllKosar();
     /*this.updateKosarMennyiseg();*/
     
   }
+
+  async gettingAllKosar(){
+    this.termekek = await this.kosarService.getKosar();
+    console.log("Valami", this.termekek);
+  }
+  
 
 
   isLoggedIn(): boolean{
@@ -58,13 +64,7 @@ export class KosarComponent {
   }
   getTeljesOsszeg(): number{
     return this.termekek.reduce((osszeg, item) => {
-      const termek = this.getTermekId(item.id);
-      if (termek) {
-        return osszeg + (termek.termekara * item.mennyi);
-      } else {
-        console.warn(`Termék ID: ${item.id} nem található, ezért kimarad az összegből.`);
-        return osszeg;
-      }
+      return osszeg + (item.termekara * item.mennyi);
     }, 0);
   }
 

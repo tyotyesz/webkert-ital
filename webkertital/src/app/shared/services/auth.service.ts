@@ -128,23 +128,25 @@ export class AuthService {
     }
   }
 
-  async getUserData(): Promise<any> {
-    const user = this.auth.currentUser;
-    if(user) {
-      const userDocRef = doc(this.firestore, 'Users', user.uid);
-      const userDocSnap = await getDoc(userDocRef);
-
-      if(userDocSnap.exists()) {
-        return userDocSnap.data();
+async getUserData(): Promise<any> {
+  return new Promise((resolve, reject) => {
+    this.auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const userDocRef = doc(this.firestore, 'Users', user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        if (userDocSnap.exists()) {
+          resolve(userDocSnap.data());
+        } else {
+          console.error("No such user document!");
+          resolve(null);
+        }
       } else {
-        console.error("No such user document!");
-        return null;
+        // Don't log error, just resolve null
+        resolve(null);
       }
-    } else {
-      console.error("No user is currently signed in.");
-      return null;
-    }
-  }
+    }, reject);
+  });
+}
   onAuthStateChanged(callback: (user: any) => void): void {
     this.auth.onAuthStateChanged(callback);
   }

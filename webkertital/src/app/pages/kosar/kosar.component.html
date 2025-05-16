@@ -31,19 +31,19 @@
                             <tr>
                                 <td>
                                     <div class="kosar-info">
-                                        <img mat-card-image src="{{getTermekId(item.id).kepeleres}}" alt="{{getTermekId(item.id)?.termeknev}}"> 
+                                        <img mat-card-image src="{{item.kepeleres}}" alt="{{item.termeknev}}"> 
                                         <div>
-                                            <p>{{getTermekId(item.id)?.termeknev}}</p>
-                                            <small>Ár: {{getTermekId(item.id)?.termekara}} Ft</small><br>
+                                            <p>{{item.termeknev}}</p>
+                                            <small>Ár: {{item.termekara}} Ft</small><br>
                                             <button mat-flat-button (click)="onDelete(item.id)">Törlés</button>
                                         </div>
                                     </div>
                                 </td>
                                 <td>
-                                    <!--<input type="number" [(ngModel)]="item.mennyi" (change)="updateKosar(item.id, item.mennyi)" min="0">
-                                    <button mat-flat-button hidden (click)="updateKosar(item.id, item.mennyi)"></button> -->
+                                    <input type="number" [(ngModel)]="item.mennyi"  min="0">
+                                    <button mat-flat-button hidden ></button>
                                 </td>
-                                <td>{{getTermekId(item.id)?.termekara * item.mennyi}} Ft</td>
+                                <td>{{item.termekara * item.mennyi}} Ft</td>
                             </tr>
                         }   
                         </table>            
