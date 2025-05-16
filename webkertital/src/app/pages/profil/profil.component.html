@@ -1,6 +1,5 @@
 <main *ngIf="currentUserData">
-    @if(isLoggedIn() && !fiokTorles && !jelszoFrissites){
-        <div class="bejeli">
+        <div class="bejeli" *ngIf="isLoggedIn() && !fiokTorles && !jelszoFrissites && !szallitasFrissites && !fizetesFrissites; else otherBlocks">
             <div class="wrapper">
                 <h2>Személyes adatok</h2>
                     <hr>
@@ -9,16 +8,10 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Vezetéknév</mat-label>
                             <input matInput type="text" formControlName="vezeteknev"/>
-                            @if(UresVezeteknev){
-                                <mat-error>Kérjük adja meg a vezetéknevét!</mat-error>
-                            }
                         </mat-form-field>
                         <mat-form-field appearance="outline">
                             <mat-label>Keresztnév</mat-label>
                             <input matInput type="text" formControlName="keresztnev"/>
-                            @if(UresKeresztnev){
-                                <mat-error>Kérjük adja meg a keresztnevét!</mat-error>
-                            }
                         </mat-form-field>
                         <mat-form-field appearance="outline">
                             <mat-label>Telefonszám</mat-label>
@@ -56,30 +49,34 @@
                         <div class="szallitasi-adatok">
                             <h3>
                                 <div class="hirlevel-container">
-                                    <!--@if(getSzallitasiAdatok() !== ''){
+                                      <ng-container *ngIf="currentUserData?.szallitasi_adatok && currentUserData?.szallitasi_adatok !== ''; else noSzallitasiAdat">
                                         Szállítási adatok <button mat-flat-button (click)="SzallitasEltavolit()">Eltávolítás</button>
-                                        <p>{{getSzallitasiAdatok()}} Szeged 6700</p>
+                                        <p>{{currentUserData?.szallitasi_adatok}} Szeged 6700</p>
                                         <br>
-                                    }@else {
-                                        Szállítási adatok <button mat-flat-button (click)="SzallitasHozzaad()">Hozzáadás</button>
+                                        </ng-container>
+                                        <ng-template #noSzallitasiAdat>
+                                        Szállítási adatok <button mat-flat-button (click)="showSzallitas()">Hozzáadás</button>
                                         <p>Még nincs megadva szállítási adat!</p>
                                         <br>
-                                }-->
+                                        </ng-template>   
                                 </div>
                             </h3>
                         </div>
                         <div class="szallitasi-adatok">
-                            <h3>Fizetési adatok</h3>
-                            <!--@if(getFizetesiAdatok() === 'kartya'){
-                                <p>Kártyás fizető!</p>
-                                <br>
-                            }@else if(getFizetesiAdatok() === 'utanvet') {
-                                <p>Utánvét (készpénzzel)</p>
-                                <br>
-                            }@else {
-                                <p>Még nincs megadva fizetési adat!</p>
-                                <br>
-                        }-->
+                            <h3>
+                                <div class="hirlevel-container">
+                                    <ng-container *ngIf="currentUserData?.fizetesi_adatok && currentUserData.fizetesi_adatok !== ''; else noFizetesiAdat">
+                                        Fizetési adatok <button mat-flat-button (click)="FizetesEltavolit()">Eltávolítás</button>
+                                        <p>Utánvét (készpénzzel)</p>
+                                        <br>
+                                    </ng-container>
+                                    <ng-template #noFizetesiAdat>
+                                        Fizetési adatok <button mat-flat-button (click)="showFizetes()">Hozzáadás</button>
+                                        <p>Még nincs megadva fizetési adat!</p>
+                                        <br>
+                                    </ng-template>
+                                </div>
+                            </h3>
                         </div>
                         <hr>
                         <div class="kijelentkezes">
@@ -91,18 +88,16 @@
                 </div>
             </div>
         </div>
-    }
-    @else if(!isLoggedIn() && !fiokTorles && !jelszoFrissites) {
-        <div class="hibasvalami">
-            <div class="azthiszemez">
-                <h2>Hoppáré!</h2>
-                <p>Hogyha meg szeretnéd tekinteni a fiókod, akkor jelentkezzen be!</p>
-                <br>
-                <a mat-list-item routerLink="/bejelentkezes" routerLinkActive="activate-list-item">Kattints ide a bejelentkezéshez!</a>
+        <ng-template #otherBlocks>
+            <div class="hibasvalami" *ngIf="!isLoggedIn() && !fiokTorles && !jelszoFrissites && !szallitasFrissites && !fizetesFrissites">
+                <div class="azthiszemez">
+                    <h2>Hoppáré!</h2>
+                    <p>Hogyha meg szeretnéd tekinteni a fiókod, akkor jelentkezzen be!</p>
+                    <br>
+                    <a mat-list-item routerLink="/bejelentkezes" routerLinkActive="activate-list-item">Kattints ide a bejelentkezéshez!</a>
+                </div>
             </div>
-        </div>
-    }@else if(isLoggedIn() && fiokTorles && !jelszoFrissites ){
-        <div class="bejeli">
+                    <div class="bejeli" *ngIf="isLoggedIn() && fiokTorles && !jelszoFrissites && !szallitasFrissites && !fizetesFrissites">
             <div class="wrapper">
                 <h3 class="pass-box">Adja meg a jelszavát a törléshez!</h3>
                 <mat-form-field appearance="outline">
@@ -117,8 +112,7 @@
                 </div>
             </div>
         </div>
-    }@else if(isLoggedIn() && !fiokTorles && jelszoFrissites){
-        <div class="bejeli">
+        <div class="bejeli" *ngIf="isLoggedIn() && !fiokTorles && jelszoFrissites && !szallitasFrissites && !fizetesFrissites">
             <div class="wrapper">
                 <h3 class="pass-box">Adja meg a jelszavát és előző jelszavát a módosításhoz!</h3>
                 <div class="sneci">
@@ -139,5 +133,38 @@
                 </div>
             </div>
         </div>
-    }
+        <div class="bejeli" *ngIf="isLoggedIn() && !fiokTorles && !jelszoFrissites && szallitasFrissites && !fizetesFrissites">
+            <div class="wrapper">
+                <h3 class="pass-box">Adja meg a szállítási adatait!</h3>
+                <mat-form-field appearance="outline">
+                    <mat-label>Szállítási adatok</mat-label>
+                    <input matInput [(ngModel)]="szallitasiAdatokHozza" required placeholder="Utca, házszám"/>
+                </mat-form-field>
+                <div class="kijelentkezes">
+                    <button class="kijelibutton" mat-flat-button (click)="SzallitasHozzaad()">Hozzáadás</button>
+                </div>
+                <div class="kijelentkezes">
+                    <button class="kijelibutton" mat-flat-button (click)="szallitasFrissites = false">Mégse</button>
+                </div>
+            </div>
+        </div>
+        <div class="bejeli" *ngIf="isLoggedIn() && !fiokTorles && !jelszoFrissites && !szallitasFrissites && fizetesFrissites">
+            <div class="wrapper">
+                <h3 class="pass-box">Adja meg a fizetési adatait!</h3>
+                <mat-form-field appearance="outline">
+                    <mat-label>Fizetési adatok</mat-label>
+                    <mat-select [(ngModel)]="fizetesiAdatokHozza">
+                        <mat-option value="utanvet">Utánvét (készpénzzel)</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div class="kijelentkezes">
+                    <button class="kijelibutton" mat-flat-button (click)="FizetesHozzaad()">Hozzáadás</button>
+                </div>
+                <div class="kijelentkezes">
+                    <button class="kijelibutton" mat-flat-button (click)="fizetesFrissites = false">Mégse</button>
+                </div>
+            </div>
+        </div>
+        </ng-template>
+
 </main>

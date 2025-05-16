@@ -70,7 +70,7 @@ export class RegisztracioComponent {
         telefonszam: telefonszam,
         szallitasi_adatok: '',
         admin: false,
-        fizetesi_adatok: 'utanvet',
+        fizetesi_adatok: '',
         hirlevelsub: 'nem',
         kosar: [],
         orders: []

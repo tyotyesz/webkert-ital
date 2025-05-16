@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { AuthService } from '../../shared/services/auth.service';
+import {MatSelectModule} from '@angular/material/select';
 
 @Component({
   selector: 'app-profil',
@@ -24,7 +25,8 @@ import { AuthService } from '../../shared/services/auth.service';
     RouterLink,
     RouterLinkActive,
     MatListModule,
-    CommonModule
+    CommonModule,
+    MatSelectModule
   ],
   templateUrl: './profil.component.html',
   styleUrl: './profil.component.scss'
@@ -39,9 +41,13 @@ export class ProfilComponent implements OnInit {
   UresEmail = false;
   fiokTorles = false;
   jelszoFrissites = false;
+  szallitasFrissites = false;
+  fizetesFrissites = false;
   veglegesJelszo: string = '';
   oldPass: string = '';
   newPass: string = '';
+  szallitasiAdatokHozza: string = '';
+  fizetesiAdatokHozza: string = '';
   currentUserData: any = {};
   @Output() logoutEvent = new EventEmitter<void>();
 
@@ -124,12 +130,6 @@ export class ProfilComponent implements OnInit {
   getHirlevelsub(): boolean{
     return this.currentUserData.hirlevelsub === 'igen';
   }
-  /*getSzallitasiAdatok(): any | null{
-    return this.felhasznaloService.getFelhasznalo()?.szallitasi_adatok;
-  }
-  getFizetesiAdatok(): any | null{
-    return this.felhasznaloService.getFelhasznalo()?.fizetesi_adatok;
-  }*/
   HirlevelEltavolit(): Promise<void> {
     const hirlevelsub = this.currentUserData.hirlevelsub === 'igen' ? 'nem' : 'igen';
     return this.authService.updateUserData({ hirlevelsub })
@@ -152,18 +152,53 @@ export class ProfilComponent implements OnInit {
         alert('Hiba történt a hírlevél feliratkozás frissítése során.');
       });
   }
-  /*SzallitasEltavolit(): void{
-    const felhasznalo = this.felhasznaloService.getFelhasznalo();
-    if(felhasznalo){
-      this.felhasznaloService.updateFelhasznalo({ ...felhasznalo, szallitasi_adatok: '' });
-      this.router.navigate(['/profil']);
+  showSzallitas(): void {
+    this.szallitasFrissites = true;
+  }
+  async SzallitasEltavolit(): Promise<void> {
+    try{
+      await this.authService.updateUserData({ szallitasi_adatok: "" });
+      await this.loadUserData();
+    } catch (error) {
+      console.error('Hiba a szállítási adatok eltávolítása során:', error);
+      alert('Hiba történt a szállítási adatok eltávolítása során.');
     }
-  }*/
-  
-  /*SzallitasHozzaad(): void {
-    this.router.navigate(['/szallitasiadatok']);
-  }*/
-
+  }
+  async FizetesEltavolit(): Promise<void> {
+    try{
+      await this.authService.updateUserData({ fizetesi_adatok: "" });
+      await this.loadUserData();
+    } catch (error) {
+      console.error('Hiba a fizetési adatok eltávolítása során:', error);
+      alert('Hiba történt a fizetési adatok eltávolítása során.');
+    }
+  }
+  SzallitasHozzaad(): Promise<void> {
+    const szallitas = this.szallitasiAdatokHozza;
+    return this.authService.updateUserData({ szallitasi_adatok: szallitas })
+      .then(() => {
+        this.szallitasiAdatokHozza = '';
+        this.szallitasFrissites = false;
+        this.loadUserData();
+      })
+      .catch((error) => {
+        console.error('Hiba a szállítási adatok frissítése során:', error);
+        alert('Hiba történt a szállítási adatok frissítése során.');
+      });
+  }
+  FizetesHozzaad(): Promise<void> {
+    const fizetes = this.fizetesiAdatokHozza;
+    return this.authService.updateUserData({ fizetesi_adatok: fizetes })
+      .then(() => {
+        this.fizetesiAdatokHozza = '';
+        this.fizetesFrissites = false;
+        this.loadUserData();
+      })
+      .catch((error) => {
+        console.error('Hiba a fizetési adatok frissítése során:', error);
+        alert('Hiba történt a fizetési adatok frissítése során.');
+      });
+  }
   kijelentkezes(): void{
     this.authService.signOut().then(() => {
       this.logoutEvent.emit();
@@ -188,6 +223,9 @@ export class ProfilComponent implements OnInit {
   }
   showUpdatePassword(): void {
     this.jelszoFrissites = true;
+  }
+  showFizetes(): void {
+    this.fizetesFrissites = true;
   }
   async updatePassword(): Promise<void> {
     if(!this.oldPass || !this.newPass) {

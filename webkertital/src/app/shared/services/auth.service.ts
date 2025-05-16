@@ -160,4 +160,5 @@ export class AuthService {
       throw new Error("No user is currently signed in.");
     }
   }
+
 }
