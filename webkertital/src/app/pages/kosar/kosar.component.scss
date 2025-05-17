@@ -56,13 +56,33 @@ td img {
 }
 .teljes-osszeg{
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end; // ensures children are pushed to the bottom
+    min-height: 250px; // adjust as needed for your layout
+    width: 100%;
 }
 .teljes-osszeg table{
     border-top: 3px solid #ff9966;
     width: 100%;
     max-width: 400px;
     font-family: 'Montserrat', sans-serif;
+    margin-bottom: 16px;
+    align-self: flex-end;
+}
+.teljes-osszeg button {
+    width: 200px;
+    align-self: flex-end;
+    margin-top: 8px;
+    margin-bottom: 24px;
+    background: #ff9966 !important;
+    font-family: 'Montserrat', sans-serif !important;
+    color: white;
+    font-size: 16px;
+    transition: 0.3s;
+}
+.teljes-osszeg button:hover{
+    background: rgba(17, 107, 143, 0.877) !important;
 }
 td:last-child{
     text-align: right;

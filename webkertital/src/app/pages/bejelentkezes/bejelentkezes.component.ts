@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { AuthService } from '../../shared/services/auth.service';
 import { AppComponent } from '../../app.component';
+import { CommonModule } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 
@@ -21,7 +23,9 @@ import { AppComponent } from '../../app.component';
     MatButtonModule,
     RouterLinkActive,
     RouterLink,
-    MatListModule
+    MatListModule,
+    CommonModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './bejelentkezes.component.html',
   styleUrl: './bejelentkezes.component.scss'
@@ -29,6 +33,7 @@ import { AppComponent } from '../../app.component';
 export class BejelentkezesComponent {
   loginForm!: FormGroup;
   loginError = false;
+  loading = false;
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -49,6 +54,7 @@ export class BejelentkezesComponent {
 
   login(): void{
     if(this.loginForm.valid){
+      this.loading = true;
       const {email, jelszo} = this.loginForm.value;
       this.authService.signIn(email, jelszo)
       .then(userCredential => {
@@ -61,6 +67,7 @@ export class BejelentkezesComponent {
             localStorage.setItem('admin-e', 'false');
           }
           this.appcomponent.updateKosarMennyiseg();
+          this.loading = false;
           this.router.navigateByUrl('/fomenu');
         });
       })

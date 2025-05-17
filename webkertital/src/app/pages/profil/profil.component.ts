@@ -145,7 +145,7 @@ export class ProfilComponent implements OnInit {
         });
       } else {
         console.log('Nincs bejelentkezett felhasználó.');
-        this.router.navigate(['/login']);
+        this.router.navigate(['/bejelentkezes']);
       }
     });
   }

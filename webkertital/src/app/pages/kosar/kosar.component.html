@@ -67,7 +67,7 @@
                             <td>{{getVegosszeg() | hufcurrency}} Ft</td>
                         </tr>
                     </table>
-                    <button mat-flat-button (click)="onCheckout()" [disabled]="!currentUserData.szallitasi_adatok">Megrendelés</button>
+                    <button mat-flat-button (click)="onCheckout()" [disabled]="!currentUserData.szallitasi_adatok || !currentUserData.fizetesi_adatok">Megrendelés</button>
                 </div>
                 
             <div class="hibasvalami" *ngIf="mennyiseg === 0 && !loading && !checkoutLoading && !checkoutDone">

@@ -1,6 +1,5 @@
 <main>
-    @if(!isLoggedIn()){
-    <div class="bejeli">
+    <div class="bejeli" *ngIf="!isLoggedIn() && !loading; else otherThings">
         <div class="wrapper">
             <h2>Bejelentkezés</h2>
             @if(loginError){
@@ -26,10 +25,9 @@
                 </div>
             </form>
            </div>
-    </div>  
-    }
-    @else {
-        <div class="hibasvalami">
+    </div> 
+    <ng-template #otherThings>
+        <div class="hibasvalami" *ngIf="isLoggedIn() && !loading">
             <div class="azthiszemez">
                 <h2>Hoppáré!</h2>
                 <p>Te már be vagy jelentkezve!</p>
@@ -37,5 +35,12 @@
                 <a mat-list-item routerLink="/profil" routerLinkActive="activate-list-item">Ugrás a profilra!</a>   
             </div>
         </div>
-    }
+        <div class="hibasvalamixd" *ngIf="loading">
+            <div class="azthiszemezxd">
+                <h2>Bejelentkezés folyamatban!</h2>
+                <mat-spinner [diameter]="40"></mat-spinner>
+            </div>
+        </div>
+    </ng-template> 
+        
 </main>
