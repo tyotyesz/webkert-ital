@@ -27,7 +27,7 @@ export class UditokComponent implements OnInit{
   ) { }
 
   ngOnInit(): void {
-    this.termekekService.getProductsByCategory('uditok')
+    this.termekekService.getUditok()
       .then(products => {
         this.uditoTermekek = products;
         console.log(this.uditoTermekek);

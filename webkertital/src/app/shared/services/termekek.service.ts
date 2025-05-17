@@ -55,7 +55,18 @@ export class TermekekService {
       throw error;
     }
   }
-
+  async getUditok(): Promise<any[]> {
+    try{
+      const termekekCollection = collection(this.firestore, "Termekek");
+      const q = query(termekekCollection, where("kategoria", "==", "uditok"));
+      const querySnapshot = await getDocs(q);
+      const products = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data()}));
+      return products;
+    } catch (error) {
+      console.error("Error fetching uditok products:", error);
+      throw error;
+    }
+  }
   async deleteProduct(productId: string): Promise<void> {
     try{
       const productDocRef = doc(this.firestore, "Termekek", productId);
