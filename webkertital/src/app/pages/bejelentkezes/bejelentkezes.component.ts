@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { FelhasznaloService } from '../../shared/services/felhasznalo.service';
 import { Router, RouterLink, RouterLinkActive} from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -32,7 +31,6 @@ export class BejelentkezesComponent {
   loginError = false;
   constructor(
     private formBuilder: FormBuilder,
-    private felhasznaloServie: FelhasznaloService,
     private router: Router,
     private authService: AuthService,
     public appcomponent: AppComponent

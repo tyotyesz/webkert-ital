@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, getDocs, query, where, doc, deleteDoc, addDoc, getDoc, updateDoc, arrayUnion } from '@angular/fire/firestore';
+import { Firestore, collection, getDocs, query, where, doc, deleteDoc, addDoc, getDoc, updateDoc, arrayUnion, arrayRemove } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { BehaviorSubject } from 'rxjs';
 
@@ -62,6 +62,37 @@ export class KosarService {
     this.cartChanged.next();
   }
 
+  async removeFromCart(productId: string): Promise<void> {
+    const user = await this.authService.getUserData();
+    if (!user) {
+      return;
+    }
+
+    const userDocRef = doc(this.firestore, 'Users', user.id);
+    const userDocSnap = await getDoc(userDocRef);
+    const userData = userDocSnap.data();
+    const kosarArray: string[] = userDocSnap.exists() && userData && Array.isArray(userData['kosar']) ? userData['kosar'] : [];
+
+    let kosarDocId: string | null = null;
+    for (const kosarId of kosarArray) {
+      const kosarDocRef = doc(this.firestore, 'Kosar', kosarId);
+      const kosarDocSnap = await getDoc(kosarDocRef);
+      const kosarData = kosarDocSnap.data();
+      if(kosarDocSnap.exists() && kosarData && kosarData['productid'] === productId) {
+        kosarDocId = kosarId;
+        break;
+      }
+    }
+
+    if(kosarDocId) {
+      await updateDoc(userDocRef, {
+        kosar: arrayRemove(kosarDocId)
+      });
+      await deleteDoc(doc(this.firestore, 'Kosar', kosarDocId));
+      this.cartChanged.next();
+    }
+  }
+
 
   async getCartQuantity(): Promise<number> {
   const user = await this.authService.getUserData();
@@ -88,41 +119,68 @@ export class KosarService {
   }
 
   async getKosar(): Promise<any[]> {
-  const user = await this.authService.getUserData();
-  if (!user) return [];
+    const user = await this.authService.getUserData();
+    if (!user) return [];
 
-  const userDocRef = doc(this.firestore, 'Users', user.id);
-  const userDocSnap = await getDoc(userDocRef);
-  const userData = userDocSnap.data();
-  const kosarArray: string[] = userDocSnap.exists() && userData && Array.isArray(userData['kosar']) ? userData['kosar'] : [];
+    const userDocRef = doc(this.firestore, 'Users', user.id);
+    const userDocSnap = await getDoc(userDocRef);
+    const userData = userDocSnap.data();
+    const kosarArray: string[] = userDocSnap.exists() && userData && Array.isArray(userData['kosar']) ? userData['kosar'] : [];
 
-  // Fetch all Kosar docs in parallel
-  const kosarDocs = await Promise.all(
-    kosarArray.map(kosarId => getDoc(doc(this.firestore, 'Kosar', kosarId)))
-  );
+    const kosarDocs = await Promise.all(
+      kosarArray.map(kosarId => getDoc(doc(this.firestore, 'Kosar', kosarId)))
+    );
 
-  // For each Kosar doc, fetch the product details
-  const result: any[] = [];
-  for (const kosarDocSnap of kosarDocs) {
-    const kosarData = kosarDocSnap.data();
-    if (kosarDocSnap.exists() && kosarData) {
-      const productId = kosarData['productid'];
-      const mennyi = kosarData['mennyi'];
-      const termekDocSnap = await getDoc(doc(this.firestore, 'Termekek', productId));
-      const termekData = termekDocSnap.data();
-      if (termekDocSnap.exists() && termekData) {
-        result.push({
-          id: productId,
-          mennyi,
-          termeknev: termekData['termeknev'],
-          termekara: termekData['termekara'],
-          kepeleres: termekData['kepeleres']
-        });
+    const result: any[] = [];
+    for (const kosarDocSnap of kosarDocs) {
+      const kosarData = kosarDocSnap.data();
+      if (kosarDocSnap.exists() && kosarData) {
+        const productId = kosarData['productid'];
+        const mennyi = kosarData['mennyi'];
+        const termekDocSnap = await getDoc(doc(this.firestore, 'Termekek', productId));
+        const termekData = termekDocSnap.data();
+        if (termekDocSnap.exists() && termekData) {
+          result.push({
+            id: productId,
+            mennyi,
+            termeknev: termekData['termeknev'],
+            termekara: termekData['termekara'],
+            kepeleres: termekData['kepeleres']
+          });
+        }
       }
     }
+    console.log("SZAR", result);
+    return result;
   }
-  console.log("SZAR", result);
-  return result;
-}
+
+  async updateKosarQuantity(productId: string, newQty: number): Promise<void> {
+    const user = await this.authService.getUserData();
+    if (!user) return;
+
+    const userDocRef = doc(this.firestore, 'Users', user.id);
+    const userDocSnap = await getDoc(userDocRef);
+    const userData = userDocSnap.data();
+    const kosarArray: string[] = userDocSnap.exists() && userData && Array.isArray(userData['kosar']) ? userData['kosar'] : [];
+
+    let kosarDocId: string | null = null;
+    for (const kosarId of kosarArray) {
+      const kosarDocRef = doc(this.firestore, 'Kosar', kosarId);
+      const kosarDocSnap = await getDoc(kosarDocRef);
+      const kosarData = kosarDocSnap.data();
+      if (kosarDocSnap.exists() && kosarData && kosarData['productid'] === productId) {
+        kosarDocId = kosarId;
+        break;
+      }
+    }
+
+    if(kosarDocId) {
+      const kosarDocRef = doc(this.firestore, 'Kosar', kosarDocId);
+      await updateDoc(kosarDocRef, { mennyi: newQty });
+      this.cartChanged.next();
+    }
+
+
+  }
   
 }

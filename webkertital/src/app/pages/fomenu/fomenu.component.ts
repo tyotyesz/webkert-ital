@@ -2,7 +2,6 @@ import { Component, OnInit, NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Termek} from '../../shared/models/termekek';
 import { Felhasznalo} from '../../shared/models/felhasznalok';
-import { FelhasznaloService } from '../../shared/services/felhasznalo.service';
 import { MatButtonModule } from '@angular/material/button';
 import { Kosar} from '../../shared/models/kosar';
 import { KosarService } from '../../shared/services/kosar.service';

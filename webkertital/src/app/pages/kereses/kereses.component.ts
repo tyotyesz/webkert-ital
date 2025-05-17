@@ -4,6 +4,8 @@ import { MatListModule } from '@angular/material/list';
 import { TermekekService } from '../../shared/services/termekek.service';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { KosarService } from '../../shared/services/kosar.service';
+import { AppComponent } from '../../app.component';
 
 @Component({
   selector: 'app-kereses',
@@ -19,7 +21,7 @@ export class KeresesComponent implements OnInit{
   query: string = '';
   results: any[] = [];
 
-  constructor(private termekekService: TermekekService, private route: ActivatedRoute)
+  constructor(private termekekService: TermekekService, private route: ActivatedRoute, private kosarService: KosarService, private appcomponent: AppComponent)
  {}
 
   ngOnInit(): void {
@@ -58,5 +60,16 @@ export class KeresesComponent implements OnInit{
 
   isLoggedIn(): boolean {
     return localStorage.getItem('bejelentkezve-e') === 'true';
+  }
+  addToCart(product: any): void {
+    this.appcomponent.kosarMennyiseg += 1;
+    this.kosarService.addToCart(product.id)
+      .then(() => {
+        console.log('Termék hozzáadva a kosárhoz:', product);
+      })
+      .catch(error => {
+        this.appcomponent.kosarMennyiseg -= 1;
+        console.error('Hiba a termék kosárhoz adásakor:', error);
+      });
   }
 }

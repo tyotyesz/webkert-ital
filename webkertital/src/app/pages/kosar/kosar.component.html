@@ -1,55 +1,58 @@
 <main>
-    @if (!isLoggedIn()){
-        <div class="hibasvalami">
+    <div class="hibasvalami" *ngIf="!isLoggedIn(); else ItsLoggedLol">
+        <div class="azthiszemez">
+            <h2>Hoppáré!</h2>
+            <p>A rendelések megtekintésehez kérjük jelentkezzen be!</p>
+            <a mat-list-item routerLink="/bejelentkezes" routerLinkActive="activate-list-item">Kattints ide a bejelentkezéshez!</a>   
+        </div>
+    </div>
+    <ng-template #ItsLoggedLol>
+        <div *ngIf="loading && !checkoutDone && !checkoutLoading" class="hibasvalamixd">
             <div class="azthiszemez">
-                <h2>Hoppáré!</h2>
-                <p>A rendelések megtekintésehez kérjük jelentkezzen be!</p>
-                <a mat-list-item routerLink="/bejelentkezes" routerLinkActive="activate-list-item">Kattints ide a bejelentkezéshez!</a>   
+                <h2>Kosár betöltése</h2>
+                <mat-spinner></mat-spinner>
             </div>
         </div>
-    }@else {
-        <!--@for (mennyi of mennyitermek; track $index) {-->
-            @if(isKosarUres()){
-                <div class="hibasvalami">
-                    <div class="azthiszemez">
-                        <h2>Hoppáré!</h2>
-                        <p>A kosarad üres!</p>
-                        <a mat-list-item routerLink="/fooldal" routerLinkActive="activate-list-item">Kattints ide a vásárláshoz!</a>   
-                    </div>
-                </div>
-            }
-            @else {
-                <div class="kosarka">
-                    <div class="kosar-oldal">
-                        <table>
-                            <tr>
-                                <th>Termék</th>
-                                <th>Mennyiség</th>
-                                <th>Egységár</th>
-                            </tr>
-                        @for (item of termekek; track $index) {
-                            <tr>
-                                <td>
-                                    <div class="kosar-info">
-                                        <img mat-card-image src="{{item.kepeleres}}" alt="{{item.termeknev}}"> 
-                                        <div>
-                                            <p>{{item.termeknev}}</p>
-                                            <small>Ár: {{item.termekara}} Ft</small><br>
-                                            <button mat-flat-button (click)="onDelete(item.id)">Törlés</button>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <input type="number" [(ngModel)]="item.mennyi"  min="0">
-                                    <button mat-flat-button hidden ></button>
-                                </td>
-                                <td>{{item.termekara * item.mennyi}} Ft</td>
-                            </tr>
-                        }   
+        <div *ngIf="checkoutLoading" class="hibasvalamixd">
+            <div class="azthiszemez">
+                <h2>Rendelés véglegesítése</h2>
+                <mat-spinner></mat-spinner>
+            </div>
+        </div>
+        <div class="hibasvalamixd" *ngIf="checkoutDone">
+            <div class="azthiszemez">
+                <h2>Sikeres megrendelés!</h2>
+                <p>Tekintsd meg a rendelésed a profilodon!</p>
+            </div>
+        </div>
+        <div class="kosarka" *ngIf="mennyiseg !== 0 && !checkoutLoading">
+            <div class="kosar-oldal">
+                <table>
+                    <tr>
+                        <th>Termék</th>
+                        <th>Mennyiség</th>
+                        <th>Egységár</th>
+                    </tr>
+                    <tr *ngFor="let item of termekek; let i = index">
+                        <td>
+                        <div class="kosar-info">
+                            <img mat-card-image src="{{item.kepeleres}}" alt="{{item.termeknev}}"> 
+                                <div>
+                                    <p>{{item.termeknev}}</p>
+                                    <small>Ár: {{item.termekara}} Ft</small><br>
+                                    <button mat-flat-button (click)="onDelete(item.id)">Törlés</button>
+                                </div>
+                        </div>
+                        </td>
+                        <td>
+                            <input type="number" [(ngModel)]="item.mennyi"  min="0" (change)="onQuantityChange(item)">
+                        </td>
+                        <td>{{item.termekara * item.mennyi}} Ft</td>
+                        </tr>  
                         </table>            
-                    </div>
                 </div>
-                <div class="teljes-osszeg">              
+            </div>
+                <div class="teljes-osszeg" *ngIf="mennyiseg !== 0 && !checkoutLoading">              
                     <table>
                         <tr>
                             <td>Összeg</td>
@@ -64,11 +67,15 @@
                             <td>{{getVegosszeg()}} Ft</td>
                         </tr>
                     </table>
+                    <button mat-flat-button (click)="onCheckout()">Megrendelés</button>
                 </div>
-            }
-        }
-        
-            
-    <!--}-->
-            
+                
+            <div class="hibasvalami" *ngIf="mennyiseg === 0 && !loading && !checkoutLoading && !checkoutDone">
+                    <div class="azthiszemez">
+                        <h2>Hoppáré!</h2>
+                        <p>A kosarad üres!</p>
+                        <a mat-list-item routerLink="/fooldal" routerLinkActive="activate-list-item">Kattints ide a vásárláshoz!</a>   
+                    </div>
+            </div>
+        </ng-template>
 </main>

@@ -13,6 +13,18 @@ table{
     display: flex;
     flex-wrap: wrap;
 }
+.hibasvalamixd{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px; // adjust as needed for your layout
+    text-align: center;
+}
+mat-spinner{
+    margin: 24px auto 0 auto !important;
+    width: 40px !important;
+    height: 40px !important;
+}
 th{
     text-align: left;
     padding: 5px;

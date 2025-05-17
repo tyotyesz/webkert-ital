@@ -1,5 +1,4 @@
 import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from '@angular/core';
-import { FelhasznaloService } from '../../shared/services/felhasznalo.service';
 import { CommonModule } from '@angular/common';
 import { Felhasznalo} from '../../shared/models/felhasznalok';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';

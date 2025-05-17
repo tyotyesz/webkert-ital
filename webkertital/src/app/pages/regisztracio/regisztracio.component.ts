@@ -6,7 +6,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { Router, RouterLink, RouterLinkActive} from '@angular/router';
-import { FelhasznaloService } from '../../shared/services/felhasznalo.service';
 import { Felhasznalo } from '../../shared/models/felhasznalok';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { AuthService } from '../../shared/services/auth.service';
@@ -34,7 +33,6 @@ export class RegisztracioComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private felhasznaloService: FelhasznaloService,
     private router: Router,
     private authService: AuthService
   ) {}

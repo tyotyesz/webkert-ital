@@ -5,7 +5,7 @@
             <div class="kep">
                 <img mat-card-image [src]="item.kepeleres" [alt]="item.termeknev">
                 <div class="icon" *ngIf="isLoggedIn()">
-                    <button mat-mini-fab><mat-icon>shopping_basket</mat-icon></button>
+                    <button mat-mini-fab (click)="addToCart(item)"><mat-icon>shopping_basket</mat-icon></button>
                 </div>
             </div>
             <div class="italok">
