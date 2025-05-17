@@ -13,6 +13,9 @@ import { KosarComponent } from './pages/kosar/kosar.component';
 import { RegisztracioComponent } from './pages/regisztracio/regisztracio.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { KeresesComponent } from './pages/kereses/kereses.component';
+import { authGuard } from './shared/guards/auth.guard';
+import { adminGuard } from './shared/guards/admin.guard';
+import { noAuthGuard } from './shared/guards/no-auth.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'igazolas', pathMatch: 'full',},
@@ -23,11 +26,11 @@ export const routes: Routes = [
     { path: 'alkoholos', component: AlkoholosComponent},
     { path: 'kulonleges', component: KulonlegesComponent},
     { path: 'receptek', component: ReceptekComponent},
-    { path: 'bejelentkezes', component: BejelentkezesComponent},
-    { path: 'profil', component: ProfilComponent},
-    { path: 'regisztracio', component: RegisztracioComponent},
+    { path: 'bejelentkezes', component: BejelentkezesComponent, canActivate: [noAuthGuard]},
+    { path: 'profil', component: ProfilComponent, canActivate: [authGuard]},
+    { path: 'regisztracio', component: RegisztracioComponent, canActivate: [noAuthGuard]},
     { path: 'kosar', component: KosarComponent},
-    { path: 'admin', component: AdminComponent},
+    { path: 'admin', component: AdminComponent, canActivate: [authGuard, adminGuard]},
     
 ];
 

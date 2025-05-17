@@ -7,18 +7,21 @@ import { Kosar} from '../../shared/models/kosar';
 import { KosarService } from '../../shared/services/kosar.service';
 import { TermekekService } from '../../shared/services/termekek.service';
 import { AppComponent } from '../../app.component';
+import { HufcurrencyPipe } from '../../shared/pipes/hufcurrency.pipe';
 
 @Component({
   selector: 'app-fomenu',
   imports: [
     MatButtonModule,
-    CommonModule
+    CommonModule,
+    HufcurrencyPipe
   ],
   templateUrl: './fomenu.component.html',
   styleUrl: './fomenu.component.scss'
 })
 export class FomenuComponent implements OnInit{
   termekek: any[] = [];
+  olcsonTermekek: any[] = [];
 
   constructor(
     private kosarService: KosarService,
@@ -36,6 +39,14 @@ export class FomenuComponent implements OnInit{
      .catch(error => {
         console.error('Hiba a termékek betöltésekor:', error);
      });
+    this.termekekService.getCheapestProducts()
+      .then(products => {
+          this.olcsonTermekek = products;
+          console.log(this.olcsonTermekek);
+      })
+      .catch(error => {
+          console.error('Hiba a legolcsóbb termékek betöltésekor:', error);
+      });
   }
 
   isLoggedIn(): boolean {

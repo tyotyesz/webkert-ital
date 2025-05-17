@@ -10,6 +10,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatBadgeModule} from '@angular/material/badge';
 import { KosarService } from './shared/services/kosar.service';
 import { AuthService } from './shared/services/auth.service';
+import { ProfilComponent } from "./pages/profil/profil.component";
 
 @Component({
   selector: 'app-root',
@@ -23,8 +24,9 @@ import { AuthService } from './shared/services/auth.service';
     MatInputModule,
     MatCardModule,
     MatBadgeModule,
-    CommonModule
-  ],
+    CommonModule,
+    ProfilComponent
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -46,6 +48,10 @@ export class AppComponent {
     this.kosarService.cartChanged.subscribe(() => {
       this.updateKosarMennyiseg();
     });
+  }
+
+  isProfilRoute(){
+    return this.router.url.startsWith('/profil');
   }
   
   isFomenuRoute(){
@@ -70,5 +76,22 @@ export class AppComponent {
     }else {
       this.kosarMennyiseg = 0;
     }
+  }
+    onProfileUpdated() {
+    alert('Profil sikeresen frissítve!');
+  }
+
+  onNewsLetterUpdated(subscribed: boolean) {
+    alert('Hírlevél státusz: ' + (subscribed ? 'Feliratkozva' : 'Leiratkozva'));
+  }
+
+  onAccountDeleted() {
+    alert('Fiók törölve!');
+    // Optionally navigate away
+  }
+
+  onLogoutEvent() {
+    alert('Sikeres kijelentkezés!');
+    // Optionally navigate away
   }
 }

@@ -96,26 +96,27 @@ export class KosarService {
 
   async getCartQuantity(): Promise<number> {
   const user = await this.authService.getUserData();
-  if (!user) return 0;
-
-  const userDocRef = doc(this.firestore, 'Users', user.id);
-  const userDocSnap = await getDoc(userDocRef);
-  const userData = userDocSnap.data();
-  const kosarArray: string[] = userDocSnap.exists() && userData && Array.isArray(userData['kosar']) ? userData['kosar'] : [];
-
-  // Fetch all Kosar docs in parallel
-  const kosarDocs = await Promise.all(
-    kosarArray.map(kosarId => getDoc(doc(this.firestore, 'Kosar', kosarId)))
-  );
-
-  let total = 0;
-  for (const kosarDocSnap of kosarDocs) {
-    const kosarData = kosarDocSnap.data();
-    if (kosarDocSnap.exists() && kosarData && typeof kosarData['mennyi'] === 'number') {
-      total += kosarData['mennyi'];
+  if (!user || !user.kosar || !Array.isArray(user.kosar)) return 0;
+  let count = 0;
+  for (const kosarId of user.kosar) {
+    const kosarDocRef = doc(this.firestore, 'Kosar', kosarId);
+    const kosarDocSnap = await getDoc(kosarDocRef);
+    if (kosarDocSnap.exists()) {
+      const data = kosarDocSnap.data();
+      count += data['mennyi'] || 1;
     }
   }
-    return total;
+  return count;
+  }
+
+  async getKosarById(kosarId: string): Promise<any> {
+    const kosarDocRef = doc(this.firestore, 'Kosar', kosarId);
+    const kosarDocSnap = await getDoc(kosarDocRef);
+    if (kosarDocSnap.exists()) {
+      return { id: kosarDocSnap.id, ...kosarDocSnap.data() };
+    } else {
+      return null;
+    }
   }
 
   async getKosar(): Promise<any[]> {
@@ -181,6 +182,11 @@ export class KosarService {
     }
 
 
+  }
+
+  async deleteKosarById(kosarId: string): Promise<void> {
+    const kosarDocRef = doc(this.firestore, 'Kosar', kosarId);
+    await deleteDoc(kosarDocRef);
   }
   
 }

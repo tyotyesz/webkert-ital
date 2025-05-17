@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Felhasznalo} from '../../shared/models/felhasznalok';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
@@ -11,6 +11,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { AuthService } from '../../shared/services/auth.service';
 import {MatSelectModule} from '@angular/material/select';
+import { DatePipe } from '../../shared/pipes/date.pipe';
+import { HufcurrencyPipe } from '../../shared/pipes/hufcurrency.pipe';
+import { OrderService } from '../../shared/services/order.service';
+import { KosarService } from '../../shared/services/kosar.service';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { TermekekService } from '../../shared/services/termekek.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-profil',
@@ -25,7 +32,11 @@ import {MatSelectModule} from '@angular/material/select';
     RouterLinkActive,
     MatListModule,
     CommonModule,
-    MatSelectModule
+    MatSelectModule,
+    DatePipe,
+    HufcurrencyPipe,
+    MatDialogModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './profil.component.html',
   styleUrl: './profil.component.scss'
@@ -33,12 +44,6 @@ import {MatSelectModule} from '@angular/material/select';
 export class ProfilComponent implements OnInit {
   profilForm!: FormGroup;
   kijelentkezesForm!: FormGroup;
-  EmailLetezik = false;
-  UresVezeteknev = false;
-  UresKeresztnev = false;
-  UresTelefonszam = false;
-  UresEmail = false;
-  fiokTorles = false;
   jelszoFrissites = false;
   szallitasFrissites = false;
   fizetesFrissites = false;
@@ -48,17 +53,66 @@ export class ProfilComponent implements OnInit {
   szallitasiAdatokHozza: string = '';
   fizetesiAdatokHozza: string = '';
   currentUserData: any = {};
+  showOrderPanel = false;
+  orders: any[] = [];
+  orderDialogItems: any[] = [];
+  orderDialogSum = 0;
+  orderDialogTax = 0;
+  orderDialogFull = 0;
+  orderDialogLoading = false;
+  @Input() showOrders: boolean = false;
+  @Input() showAccountDelete: boolean = false;
+  @Input() showPasswordUpdate: boolean = false;
+
+  @Output() profileUpdated = new EventEmitter<void>();
+  @Output() newsLetterUpdated = new EventEmitter<boolean>();
+  @Output() accountDeleted = new EventEmitter<void>();
+
+
+
   @Output() logoutEvent = new EventEmitter<void>();
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private orderService: OrderService,
+    private kosarService: KosarService,
+    private dialog: MatDialog,
+    private productsService: TermekekService
   ) {}
   
   ngOnInit(): void{
     this.initializeForm();
     this.loadUserData();
+    this.loadOrders();
+  }
+
+  async openOrderDialog(order: any, orderDialog: any){
+    this.orderDialogLoading = true;
+    this.orderDialogItems = [];
+    this.orderDialogSum = 0;
+    this.orderDialogTax = 0;
+    this.orderDialogFull = 0;
+
+    const dialogRef = this.dialog.open(orderDialog);
+
+    for (const itemId of order.items) {
+      const orderItem = await this.orderService.getOrderItemById(itemId);
+      const product = await this.productsService.getProductById(orderItem.termekid);
+      const sum = (product.termekara || 0) * (orderItem.mennyiseg || 0);
+      this.orderDialogItems.push({
+        product,
+        mennyiseg: orderItem.mennyiseg,
+        sum
+      });
+      this.orderDialogSum += sum;
+    }
+    this.orderDialogTax = this.orderDialogSum * 0.27;
+    this.orderDialogFull = this.orderDialogSum + this.orderDialogTax;
+    this.orderDialogLoading = false;
+
+    
   }
 
 
@@ -68,6 +122,9 @@ export class ProfilComponent implements OnInit {
       keresztnev:['', Validators.required],
       telefonszam:['', Validators.required]
     })
+  }
+  async loadOrders(): Promise<void> {
+    this.orders = await this.orderService.loadOrders();
   }
 
   async loadUserData(): Promise<void> {
@@ -110,10 +167,12 @@ export class ProfilComponent implements OnInit {
       await this.authService.updateUserData({ vezeteknev, keresztnev, telefonszam });
       alert('Profil sikeresen frissítve!');
       this.loadUserData();
+      this.profileUpdated.emit();
     } catch (error) {
       console.error('Hiba a profil frissítése során:', error);
       alert('Hiba történt a profil frissítése során.');
     }
+    
   }
 
   isLoggedIn(): boolean{
@@ -134,6 +193,7 @@ export class ProfilComponent implements OnInit {
     return this.authService.updateUserData({ hirlevelsub })
       .then(() => {
         this.loadUserData();
+        this.newsLetterUpdated.emit(false);
       })
       .catch((error) => {
         console.error('Hiba a hírlevél feliratkozás eltávolítása során:', error);
@@ -145,6 +205,7 @@ export class ProfilComponent implements OnInit {
     return this.authService.updateUserData({ hirlevelsub })
       .then(() => {
         this.loadUserData();
+        this.newsLetterUpdated.emit(true);
       })
       .catch((error) => {
         console.error('Hiba a hírlevél feliratkozás frissítése során:', error);
@@ -203,25 +264,45 @@ export class ProfilComponent implements OnInit {
       this.logoutEvent.emit();
     })
   }
-  deleteAccount(): void{
-    if(this.veglegesJelszo) {
-      this.authService.deleteAccount(this.veglegesJelszo)
-        .then(() => {
-          console.log("Account deleted successfully");
-          localStorage.setItem("bejelentkezve-e", "false");
-          this.router.navigate(['/fomenu']);
-        })
-        .catch(error => {
-          console.error("Error deleting account:", error);
-        });
+async deleteAccount(): Promise<void> {
+  if (this.veglegesJelszo) {
+    const user = this.currentUserData;
+    console.log("Deleting account for user:", user);
+    if (user && Array.isArray(user.kosar)) {
+      for (const kosarId of user.kosar) {
+        await this.kosarService.deleteKosarById(kosarId);
+      }
     }
-    
+
+    if (user && Array.isArray(user.orders)) {
+      for (const orderId of user.orders) {
+        const orderDoc = await this.orderService.getOrderById(orderId);
+        if (orderDoc && Array.isArray(orderDoc.items)) {
+          for (const itemId of orderDoc.items) {
+            await this.orderService.deleteOrderItemById(itemId);
+          }
+        }
+        await this.orderService.deleteOrderById(orderId);
+      }
+    }
+
+    this.authService.deleteAccount(this.veglegesJelszo)
+      .then(() => {
+        console.log("Account deleted successfully");
+        localStorage.setItem("bejelentkezve-e", "false");
+        this.accountDeleted.emit();
+        this.router.navigate(['/fomenu']);
+      })
+      .catch(error => {
+        console.error("Error deleting account:", error);
+      });
   }
+}
   showDeleteAccount(): void {
-    this.fiokTorles = true;
+    this.showAccountDelete = true;
   }
   showUpdatePassword(): void {
-    this.jelszoFrissites = true;
+    this.showPasswordUpdate = true;
   }
   showFizetes(): void {
     this.fizetesFrissites = true;
@@ -247,7 +328,7 @@ export class ProfilComponent implements OnInit {
       console.log("Password updated successfully");
       this.oldPass = '';
       this.newPass = '';
-      this.jelszoFrissites = false;
+      this.showPasswordUpdate = false;
     } catch (error) {
       console.error("Error updating password:", error);
       alert("Hiba történt a jelszó frissítése során.");

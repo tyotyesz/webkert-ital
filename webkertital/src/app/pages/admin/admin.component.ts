@@ -11,6 +11,11 @@ import { Router, RouterLinkActive, RouterLink } from '@angular/router';
 import { MatListItem } from '@angular/material/list';
 import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import { TermekekService } from '../../shared/services/termekek.service';
+import { HufcurrencyPipe } from '../../shared/pipes/hufcurrency.pipe';
+import { AuthService } from '../../shared/services/auth.service';
+import { OrderService } from '../../shared/services/order.service';
+import { AppComponent } from '../../app.component';
+import { KosarService } from '../../shared/services/kosar.service';
 
 @Component({
   selector: 'app-admin',
@@ -26,7 +31,8 @@ import { TermekekService } from '../../shared/services/termekek.service';
     RouterLink,
     RouterLinkActive,
     MatPaginatorModule,
-    CommonModule
+    CommonModule,
+    HufcurrencyPipe
   ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss'
@@ -42,7 +48,11 @@ export class AdminComponent implements OnInit{
   constructor(
     private termekekService: TermekekService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private authService: AuthService,
+    private orderService: OrderService,
+    private appcomponent: AppComponent,
+    private kosarService: KosarService
   ) {}
 
   ngOnInit(): void{
@@ -91,15 +101,65 @@ export class AdminComponent implements OnInit{
       const{termeknev, termekara, kategoria} = this.adminForm.value; 
     }
   }
-  async termekTorles(termekId: string): Promise<void>{
-    try{
-      await this.termekekService.deleteProduct(termekId);
-      await this.loadProducts();
-    } catch (error) {
-      console.error("Error deleting product:", error);
-      throw error;
+async termekTorles(termekId: string): Promise<void> {
+  try {
+    await this.termekekService.deleteProduct(termekId);
+
+    const users = await this.authService.getAllUsers();
+    for (const user of users) {
+      if (user.kosar && Array.isArray(user.kosar)) {
+        let deletedCount = 0;
+        const newKosar: string[] = [];
+        for (const kosarId of user.kosar) {
+          const kosasrData = await this.kosarService.getKosarById(kosarId);
+          if (kosasrData) {
+            if (kosasrData.productid === termekId) {
+              deletedCount += kosasrData.mennyi || 1;
+              // Delete the kosar doc for this product
+              await this.kosarService.deleteKosarById(kosarId);
+            } else {
+              newKosar.push(kosarId);
+            }
+          }
+        }
+        if (newKosar.length !== user.kosar.length) {
+          await this.authService.updateUserKosar(user.id, newKosar);
+          // Update badge for current user
+          const currentUserId = this.authService.getUserId ? this.authService.getUserId() : localStorage.getItem('userId');
+          if (user.id === currentUserId && deletedCount > 0) {
+            this.kosarService.cartChanged.next();
+          }
+        }
+      }
     }
+
+    // Orders logic remains the same
+    const orders = await this.orderService.getAllOrders();
+    for (const order of orders) {
+      if (order.items && Array.isArray(order.items)) {
+        let itemsToKeep: string[] = [];
+        for (const itemId of order.items) {
+          const orderItem = await this.orderService.getOrderItemById(itemId);
+          if (orderItem && orderItem.termekid !== termekId) {
+            itemsToKeep.push(itemId);
+          } else if (orderItem) {
+            await this.orderService.deleteOrderItemById(itemId);
+          }
+        }
+        if (itemsToKeep.length === 0) {
+          await this.orderService.deleteOrderById(order.id);
+        } else if (itemsToKeep.length !== order.items.length) {
+          await this.orderService.updateOrderItems(order.id, itemsToKeep);
+        }
+      }
+    }
+
+    await this.loadProducts();
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    throw error;
   }
+}
   getKategoriaLabel(kategoria: string): string {
   switch (kategoria) {
     case 'uditok': return 'Üdítők';

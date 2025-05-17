@@ -10,6 +10,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { OrderService } from '../../shared/services/order.service';
+import { AuthService } from '../../shared/services/auth.service';
+import { HufcurrencyPipe } from '../../shared/pipes/hufcurrency.pipe';
 
 @Component({
   selector: 'app-kosar',
@@ -23,6 +25,7 @@ import { OrderService } from '../../shared/services/order.service';
     MatButtonModule,
     CommonModule,
     MatProgressSpinnerModule,
+    HufcurrencyPipe
   ],
   templateUrl: './kosar.component.html',
   styleUrl: './kosar.component.scss'
@@ -35,18 +38,26 @@ export class KosarComponent implements OnInit {
   loading = false;
   checkoutLoading = false;
   checkoutDone = false;
+  currentUserData: any = {};
 
   constructor(
     private kosarService: KosarService,
     private termekekService: TermekekService,
     private formBuilder: FormBuilder,
-    private orderService: OrderService
+    private orderService: OrderService,
+    private authService: AuthService
     
   ){}
 
   ngOnInit(): void{
     this.gettingAllKosar();
+    this.loadUserData();
     
+  }
+
+  async loadUserData(){
+    this.currentUserData = await this.authService.getUserData();
+    console.log(this.currentUserData);
   }
 
   async gettingAllKosar(){

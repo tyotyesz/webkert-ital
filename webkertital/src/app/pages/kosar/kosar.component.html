@@ -39,7 +39,7 @@
                             <img mat-card-image src="{{item.kepeleres}}" alt="{{item.termeknev}}"> 
                                 <div>
                                     <p>{{item.termeknev}}</p>
-                                    <small>Ár: {{item.termekara}} Ft</small><br>
+                                    <small>Ár: {{item.termekara | hufcurrency }} Ft</small><br>
                                     <button mat-flat-button (click)="onDelete(item.id)">Törlés</button>
                                 </div>
                         </div>
@@ -47,7 +47,7 @@
                         <td>
                             <input type="number" [(ngModel)]="item.mennyi"  min="0" (change)="onQuantityChange(item)">
                         </td>
-                        <td>{{item.termekara * item.mennyi}} Ft</td>
+                        <td>{{item.termekara * item.mennyi | hufcurrency }} Ft</td>
                         </tr>  
                         </table>            
                 </div>
@@ -56,25 +56,25 @@
                     <table>
                         <tr>
                             <td>Összeg</td>
-                            <td>{{getTeljesOsszeg()}} Ft</td>
+                            <td>{{getTeljesOsszeg() | hufcurrency}} Ft</td>
                         </tr>
                         <tr>
                             <td>Áfa Összeg</td>
-                            <td>{{getAfa()}} Ft</td>
+                            <td>{{getAfa() | hufcurrency}} Ft</td>
                         </tr>
                         <tr>
                             <td>Összesen</td>
-                            <td>{{getVegosszeg()}} Ft</td>
+                            <td>{{getVegosszeg() | hufcurrency}} Ft</td>
                         </tr>
                     </table>
-                    <button mat-flat-button (click)="onCheckout()">Megrendelés</button>
+                    <button mat-flat-button (click)="onCheckout()" [disabled]="!currentUserData.szallitasi_adatok">Megrendelés</button>
                 </div>
                 
             <div class="hibasvalami" *ngIf="mennyiseg === 0 && !loading && !checkoutLoading && !checkoutDone">
                     <div class="azthiszemez">
                         <h2>Hoppáré!</h2>
                         <p>A kosarad üres!</p>
-                        <a mat-list-item routerLink="/fooldal" routerLinkActive="activate-list-item">Kattints ide a vásárláshoz!</a>   
+                        <a mat-list-item routerLink="/fomenu" routerLinkActive="activate-list-item">Kattints ide a vásárláshoz!</a>   
                     </div>
             </div>
         </ng-template>

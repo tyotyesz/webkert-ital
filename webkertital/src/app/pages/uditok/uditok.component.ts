@@ -5,13 +5,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { TermekekService } from '../../shared/services/termekek.service';
 import { KosarService } from '../../shared/services/kosar.service';
 import { AppComponent } from '../../app.component';
+import { HufcurrencyPipe } from '../../shared/pipes/hufcurrency.pipe';
 
 @Component({
   selector: 'app-uditok',
   imports: [
     MatButtonModule,
     MatIconModule,
-    CommonModule
+    CommonModule,
+    HufcurrencyPipe
   ],
   templateUrl: './uditok.component.html',
   styleUrl: './uditok.component.scss'

@@ -71,7 +71,102 @@ h2{
     align-items: center;
     justify-content: left;
     gap: 8px; /* Távolság a szöveg és a gomb között */
-  }
+}
+.order-card{
+    padding: 16px;
+    color: white;
+}
+.order-info{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.order-info > div{
+    text-align: left;
+}
+.order-view-btn{
+    width: 150px;
+    align-self: center;
+    font-family: 'Montserrat', sans-serif;
+    transition: 0.3s;
+}
+.order-view-button{
+    font-family: 'Montserrat', sans-serif !important;
+    background: #ff9966 !important;
+    color: white !important;
+    transition: 0.3s !important;
+}
+.order-view-button:hover{
+    background: rgba(17, 107, 143, 0.877) !important;
+    color: white !important;
+}
+.order-view-btn:hover{
+    background: rgba(17, 107, 143, 0.877);
+}
+.noorderxd{
+    color: white;
+    margin-top: 14px;
+    margin-bottom: 14px;
+    font-size: 24px;
+}
+.order-dialog-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px; /* Adjust as needed for vertical centering */
+  text-align: center;
+  gap: 16px;
+}
+::ng-deep .mat-dialog-container {
+  font-family: 'Montserrat', sans-serif !important;
+}
+::ng-deep .mat-dialog-title {
+  font-family: 'Montserrat', sans-serif !important;
+  text-align: center !important;
+  width: 100%;
+  display: block;
+}
+
+.order-dialog-loading,
+.order-item-row,
+.order-total {
+  font-family: 'Montserrat', sans-serif !important;
+}
+.order-item-row{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    font-family: 'Montserrat', sans-serif !important;
+    gap: 18px;
+}
+.order-item-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.order-item-name {
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-bottom: 4px;
+}
+
+.order-item-egyseg,
+.order-item-mennyiseg {
+  font-size: 0.98em;
+  margin-bottom: 2px;
+}
+
+.order-item-sum {
+  align-self: flex-end;
+  font-weight: bold;
+  font-size: 1.1em;
+  margin-left: 24px;
+  white-space: nowrap;
+}
 .hirlevel-container button {
     display: flex; /* Flexbox használata */
     align-items: center; /* Vertikális középre igazítás */

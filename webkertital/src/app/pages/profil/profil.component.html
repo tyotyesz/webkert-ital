@@ -1,5 +1,5 @@
 <main *ngIf="currentUserData">
-        <div class="bejeli" *ngIf="isLoggedIn() && !fiokTorles && !jelszoFrissites && !szallitasFrissites && !fizetesFrissites; else otherBlocks">
+        <div class="bejeli" *ngIf="isLoggedIn() && !showAccountDelete && !showPasswordUpdate && !szallitasFrissites && !fizetesFrissites && !showOrders; else otherBlocks">
             <div class="wrapper">
                 <h2>Személyes adatok</h2>
                     <hr>
@@ -56,7 +56,7 @@
                                         </ng-container>
                                         <ng-template #noSzallitasiAdat>
                                         Szállítási adatok <button mat-flat-button (click)="showSzallitas()">Hozzáadás</button>
-                                        <p>Még nincs megadva szállítási adat!</p>
+                                        <p>Még nincs megadva szállítási adat! A rendelés leadásához adjon meg egyet!</p>
                                         <br>
                                         </ng-template>   
                                 </div>
@@ -80,7 +80,7 @@
                         </div>
                         <hr>
                         <div class="szallitasi-adatok">
-                            <h3 class="rendelesekxd">Rendelések megtekintése</h3>
+                            <h3 class="rendelesekxd" (click)="showOrders = !showOrders">Rendelések megtekintése</h3>
                         </div>
                         <hr>
                         <div class="kijelentkezes">
@@ -93,7 +93,7 @@
             </div>
         </div>
         <ng-template #otherBlocks>
-            <div class="hibasvalami" *ngIf="!isLoggedIn() && !fiokTorles && !jelszoFrissites && !szallitasFrissites && !fizetesFrissites">
+            <div class="hibasvalami" *ngIf="!isLoggedIn() && !showAccountDelete && !showPasswordUpdate && !szallitasFrissites && !fizetesFrissites && !showOrders">
                 <div class="azthiszemez">
                     <h2>Hoppáré!</h2>
                     <p>Hogyha meg szeretnéd tekinteni a fiókod, akkor jelentkezzen be!</p>
@@ -101,7 +101,7 @@
                     <a mat-list-item routerLink="/bejelentkezes" routerLinkActive="activate-list-item">Kattints ide a bejelentkezéshez!</a>
                 </div>
             </div>
-                    <div class="bejeli" *ngIf="isLoggedIn() && fiokTorles && !jelszoFrissites && !szallitasFrissites && !fizetesFrissites">
+                    <div class="bejeli" *ngIf="isLoggedIn() && showAccountDelete && !showPasswordUpdate && !szallitasFrissites && !fizetesFrissites && !showOrders">
             <div class="wrapper">
                 <h3 class="pass-box">Adja meg a jelszavát a törléshez!</h3>
                 <mat-form-field appearance="outline">
@@ -112,11 +112,11 @@
                     <button class="kijelibutton" mat-flat-button (click)="deleteAccount()">Törlés</button>
                 </div>
                 <div class="kijelentkezes">
-                    <button class="kijelibutton" mat-flat-button (click)="fiokTorles = false">Mégse</button>
+                    <button class="kijelibutton" mat-flat-button (click)="showAccountDelete = false">Mégse</button>
                 </div>
             </div>
         </div>
-        <div class="bejeli" *ngIf="isLoggedIn() && !fiokTorles && jelszoFrissites && !szallitasFrissites && !fizetesFrissites">
+        <div class="bejeli" *ngIf="isLoggedIn() && !showAccountDelete && showPasswordUpdate && !szallitasFrissites && !fizetesFrissites && !showOrders">
             <div class="wrapper">
                 <h3 class="pass-box">Adja meg a jelszavát és előző jelszavát a módosításhoz!</h3>
                 <div class="sneci">
@@ -133,11 +133,11 @@
                     <button class="kijelibutton" mat-flat-button (click)="updatePassword()">Módosítás</button>
                 </div>
                 <div class="kijelentkezes">
-                    <button class="kijelibutton" mat-flat-button (click)="jelszoFrissites = false">Mégse</button>
+                    <button class="kijelibutton" mat-flat-button (click)="showPasswordUpdate = false">Mégse</button>
                 </div>
             </div>
         </div>
-        <div class="bejeli" *ngIf="isLoggedIn() && !fiokTorles && !jelszoFrissites && szallitasFrissites && !fizetesFrissites">
+        <div class="bejeli" *ngIf="isLoggedIn() && !showAccountDelete && !showPasswordUpdate && szallitasFrissites && !fizetesFrissites && !showOrders">
             <div class="wrapper">
                 <h3 class="pass-box">Adja meg a szállítási adatait!</h3>
                 <mat-form-field appearance="outline">
@@ -152,7 +152,7 @@
                 </div>
             </div>
         </div>
-        <div class="bejeli" *ngIf="isLoggedIn() && !fiokTorles && !jelszoFrissites && !szallitasFrissites && fizetesFrissites">
+        <div class="bejeli" *ngIf="isLoggedIn() && !showAccountDelete && !showPasswordUpdate && !szallitasFrissites && fizetesFrissites && !showOrders">
             <div class="wrapper">
                 <h3 class="pass-box">Adja meg a fizetési adatait!</h3>
                 <mat-form-field appearance="outline">
@@ -169,6 +169,61 @@
                 </div>
             </div>
         </div>
+        <div class="bejeli" *ngIf="isLoggedIn() && !showAccountDelete && !showPasswordUpdate && !szallitasFrissites && !fizetesFrissites && showOrders">
+            <div class="wrapper">
+                <h3 class="pass-box">Rendelések</h3>
+                <hr>
+                    <ng-container *ngIf="orders.length > 0; else noOrders">
+                        <div *ngFor="let order of orders" class="order-card">
+                            <div class="order-info">
+                                <div>
+                                    <div><b>Dátum:</b> {{order.ido | customDate}}</div>
+                                    <div><b>Szállítási adatok:</b> {{order.szallitasi_adatok}}</div>
+                                    <div><b>Összeg:</b> {{order.sum | hufcurrency }} Ft</div>
+                                </div>
+                                <button class="order-view-btn" mat-flat-button (click)="openOrderDialog(order, orderDialog)">Részletek</button>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-template #noOrders>
+                        <p class="noorderxd">Még nincs rendelésed!</p>
+                    </ng-template>
+                    <hr>
+                    <br>
+                    <br>
+                    <button class="order-view-btn" mat-flat-button (click)="showOrders = !showOrders">Mégse</button>
+            </div>
+        </div>
         </ng-template>
+<ng-template #orderDialog let-data>
+  <h2 mat-dialog-title>Rendelés részletei</h2>
+  <mat-dialog-content>
+    <div *ngIf="orderDialogLoading" class="order-dialog-loading">
+        <div><b>Adatok betöltése...</b></div>
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+    <div *ngIf="!orderDialogLoading">
+      <div *ngFor="let item of orderDialogItems" class="order-item-row">
+        <img [src]="item.product?.kepeleres" width="60" height="60" style="object-fit:cover; border-radius:8px; margin-right:12px;">
+        <div class="order-item-info">
+          <div class="order-item-name">{{ item.product?.termeknev }}</div>
+          <div class="order-item-egyseg">Egységár: {{ item.product?.termekara | hufcurrency }} Ft</div>
+          <div class="order-item-mennyiseg">Mennyiség: {{ item.mennyiseg }}</div>
+        </div>
+        <div class="order-item-sum">Összesen: {{ item.sum | hufcurrency }} Ft</div>
+      </div>
+      <hr>
+      <br>
+      <div class="order-total">
+        <div><b>Termékek összesen:</b> {{ orderDialogSum | hufcurrency }} Ft</div>
+        <div><b>Áfa (27%):</b> {{ orderDialogTax | hufcurrency }} Ft</div>
+        <div><b>Végösszeg (bruttó):</b> {{ orderDialogFull | hufcurrency }} Ft</div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button class="order-view-button" *ngIf="!orderDialogLoading" mat-flat-button color="primary" mat-dialog-close>Bezárás</button>
+  </mat-dialog-actions>
+</ng-template>
 
 </main>

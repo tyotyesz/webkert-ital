@@ -43,7 +43,7 @@
                         </tr>
                         <tr *ngFor="let termek of pagedProducts">
                             <td>{{termek.termeknev}}</td>
-                            <td>{{termek.termekara}} Ft</td>
+                            <td>{{termek.termekara | hufcurrency }} Ft</td>
                             <td>{{getKategoriaLabel(termek.kategoria)}}</td>
                             <td><img mat-card-image src="{{termek.kepeleres}}" style="width: 100px;" alt="{{termek.termeknev}}"></td>
                             <td><button class="erase-button" mat-flat-button (click)="termekTorles(termek.id)">Törlés</button></td>

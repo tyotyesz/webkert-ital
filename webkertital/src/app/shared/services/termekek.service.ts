@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, getDocs, query, where, doc, deleteDoc, addDoc } from '@angular/fire/firestore';
+import { Firestore, collection, getDocs, query, where, doc, deleteDoc, addDoc, getDoc, orderBy, limit } from '@angular/fire/firestore';
 
 
 @Injectable({
@@ -19,7 +19,6 @@ export class TermekekService {
       console.error("Error fetching products:", error);
       throw error;
     }
-    
   }
 
   async getRandomProducts(): Promise<any[]> {
@@ -30,14 +29,18 @@ export class TermekekService {
 
       const shuffledProducts = products.sort(() => Math.random() - 0.5);
 
-
-
       return shuffledProducts.slice(0, 5);
     } catch (error) {
       console.error("Error fetching random products:", error);
       throw error;
     }
-    
+  }
+  async getCheapestProducts(): Promise<any[]> {
+    const termekekCollection = collection(this.firestore, "Termekek");
+    const q = query(termekekCollection, orderBy("termekara", "asc"), limit(5));
+    const querySnapshot = await getDocs(q);
+    const products = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data()}));
+    return products;
   }
 
   async getProductsByCategory(category: string): Promise<any[]> {
@@ -73,5 +76,10 @@ export class TermekekService {
       console.error("Error adding product:", error);
       throw error;
     }
+  }
+  async getProductById(productId: string): Promise<any> {
+    const productDocRef = doc(this.firestore, "Termekek", productId);
+    const productSnap = await getDoc(productDocRef);
+    return productSnap.exists() ? { id: productSnap.id, ...productSnap.data() } : null;
   }
 }

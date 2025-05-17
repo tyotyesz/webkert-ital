@@ -6,13 +6,15 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { KosarService } from '../../shared/services/kosar.service';
 import { AppComponent } from '../../app.component';
+import { HufcurrencyPipe } from '../../shared/pipes/hufcurrency.pipe';
 
 @Component({
   selector: 'app-kereses',
   imports: [
     MatListModule,
     CommonModule,
-    MatIconModule
+    MatIconModule,
+    HufcurrencyPipe
   ],
   templateUrl: './kereses.component.html',
   styleUrl: './kereses.component.scss'

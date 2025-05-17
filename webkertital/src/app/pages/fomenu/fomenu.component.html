@@ -6,7 +6,21 @@
                     <div class="box" *ngFor="let item of termekek; let i = index">
                         <img [src]="item.kepeleres" [alt]="item.termeknev">
                         <p>{{ item.termeknev }}</p>
-                        <span class="akcios-ar">{{ item.termekara }} Ft</span>
+                        <span class="akcios-ar">{{ item.termekara | hufcurrency }} Ft</span>
+                        <br>
+                        <button *ngIf="isLoggedIn()" mat-flat-button class="kosarba-gomb" (click)="addToCart(item)" >Kosárba</button>
+                    </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="kiscsavo">
+        <fieldset>
+            <legend>Legolcsóbb Italok</legend>
+            <div class="box-container">
+                    <div class="box" *ngFor="let item of olcsonTermekek; let i = index">
+                        <img [src]="item.kepeleres" [alt]="item.termeknev">
+                        <p>{{ item.termeknev }}</p>
+                        <span class="akcios-ar">{{ item.termekara | hufcurrency }} Ft</span>
                         <br>
                         <button *ngIf="isLoggedIn()" mat-flat-button class="kosarba-gomb" (click)="addToCart(item)" >Kosárba</button>
                     </div>

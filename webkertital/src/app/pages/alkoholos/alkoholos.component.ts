@@ -6,10 +6,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { TermekekService } from '../../shared/services/termekek.service';
 import { KosarService } from '../../shared/services/kosar.service';
 import { AppComponent } from '../../app.component';
+import { HufcurrencyPipe } from '../../shared/pipes/hufcurrency.pipe';
 
 @Component({
   selector: 'app-alkoholos',
-  imports: [MatCardModule, MatIconModule, MatButtonModule, CommonModule],
+  imports: [MatCardModule, MatIconModule, MatButtonModule, CommonModule, HufcurrencyPipe],
   templateUrl: './alkoholos.component.html',
   styleUrl: './alkoholos.component.scss'
 })

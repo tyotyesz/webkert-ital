@@ -22,6 +22,9 @@ export class AuthService {
   signIn(email: string, password: string): Promise<UserCredential> {
     return signInWithEmailAndPassword(this.auth, email, password);
   }
+  getUserId(): string | null {
+    return this.auth.currentUser?.uid || null;
+  }
 
   signOut(): Promise<void> {
     localStorage.setItem('bejelentkezve-e', 'false');
@@ -31,6 +34,15 @@ export class AuthService {
         window.scrollTo(0, 0);
       });
     });
+  }
+  async getAllUsers(): Promise<any[]> {
+    const usersSnap = await getDocs(collection(this.firestore, 'Users'));
+    return usersSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  }
+
+  async updateUserKosar(userId: string, newKosar: any[]): Promise<void> {
+    const userDocRef = doc(this.firestore, 'Users', userId);
+    await updateDoc(userDocRef, { kosar: newKosar });
   }
 
   async signUp(email: string, password: string, userData: Partial<Felhasznalo>): Promise<UserCredential> {
