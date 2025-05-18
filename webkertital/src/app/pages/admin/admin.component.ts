@@ -129,7 +129,7 @@ export class AdminComponent implements OnInit{
 
   }
   async updateAdmin() {
-    if (!this.editProductId || this.adminUpdateForm.invalid) return;
+    if (!this.editProductId || this.adminUpdateForm.invalid || !this.selectedImageFile) return;
 
     let downloadURL: string | undefined;
     if(this.selectedImageFile) {
@@ -206,7 +206,6 @@ async termekTorles(termekId: string): Promise<void> {
           if (kosasrData) {
             if (kosasrData.productid === termekId) {
               deletedCount += kosasrData.mennyi || 1;
-              // Delete the kosar doc for this product
               await this.kosarService.deleteKosarById(kosarId);
             } else {
               newKosar.push(kosarId);
@@ -215,7 +214,6 @@ async termekTorles(termekId: string): Promise<void> {
         }
         if (newKosar.length !== user.kosar.length) {
           await this.authService.updateUserKosar(user.id, newKosar);
-          // Update badge for current user
           const currentUserId = this.authService.getUserId ? this.authService.getUserId() : localStorage.getItem('userId');
           if (user.id === currentUserId && deletedCount > 0) {
             this.kosarService.cartChanged.next();
@@ -224,7 +222,6 @@ async termekTorles(termekId: string): Promise<void> {
       }
     }
 
-    // Orders logic remains the same
     const orders = await this.orderService.getAllOrders();
     for (const order of orders) {
       if (order.items && Array.isArray(order.items)) {
