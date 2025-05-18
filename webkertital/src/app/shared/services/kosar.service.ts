@@ -17,7 +17,6 @@ export class KosarService {
 
   async addToCart(productId: string): Promise<void> {
     const user = await this.authService.getUserData();
-    console.log("XDDD", user);
     if(!user) {
       throw new Error('User not logged in');
     }
@@ -151,7 +150,6 @@ export class KosarService {
         }
       }
     }
-    console.log("SZAR", result);
     return result;
   }
 
