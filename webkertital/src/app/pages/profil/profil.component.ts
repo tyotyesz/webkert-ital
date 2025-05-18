@@ -60,6 +60,7 @@ export class ProfilComponent implements OnInit {
   orderDialogTax = 0;
   orderDialogFull = 0;
   orderDialogLoading = false;
+  ordersLoading = false;
   @Input() showOrders: boolean = false;
   @Input() showAccountDelete: boolean = false;
   @Input() showPasswordUpdate: boolean = false;
@@ -124,7 +125,9 @@ export class ProfilComponent implements OnInit {
     })
   }
   async loadOrders(): Promise<void> {
+    this.ordersLoading = true;
     this.orders = await this.orderService.loadOrders();
+    this.ordersLoading = false;
   }
 
   async loadUserData(): Promise<void> {

@@ -173,7 +173,14 @@
             <div class="wrapper">
                 <h3 class="pass-box">Rendelések</h3>
                 <hr>
-                    <ng-container *ngIf="orders.length > 0; else noOrders">
+                <ng-container *ngIf="ordersLoading; else ordersLoaded">
+                    <div class="order-loading">
+                        <p>Rendelések betöltése...</p>
+                        <mat-spinner diameter="40"></mat-spinner>
+                    </div>
+                </ng-container>
+                <ng-template #ordersLoaded>
+                        <ng-container *ngIf="orders.length > 0; else noOrders">
                         <div *ngFor="let order of orders" class="order-card">
                             <div class="order-info">
                                 <div>
@@ -192,6 +199,8 @@
                     <br>
                     <br>
                     <button class="order-view-btn" mat-flat-button (click)="showOrders = !showOrders">Mégse</button>
+                </ng-template>
+ 
             </div>
         </div>
         </ng-template>
