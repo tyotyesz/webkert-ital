@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { getStorage, provideStorage } from '@angular/fire/storage';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), 
@@ -19,5 +20,7 @@ export const appConfig: ApplicationConfig = {
         messagingSenderId: "340333591271" 
       })), 
       provideAuth(() => getAuth()), 
-      provideFirestore(() => getFirestore())]
+      provideFirestore(() => getFirestore()),
+      provideStorage(() => getStorage())
+      ],
 };

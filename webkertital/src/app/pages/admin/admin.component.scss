@@ -132,15 +132,19 @@ select{
     text-align: center;
     
 }
+.button-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* space between buttons */
+  align-items: center; /* makes buttons same width */
+}
 .erase-button{
     font-size: 1rem;
-    margin-top: 1.8rem;
-    margin-bottom: 1.8rem;
     padding: 10px 0;
     border-radius: 20px;
     outline: none;
     border: none;
-    width: 80px;
+    width: 120px;
     color: #fff;
     cursor: pointer;
     background: #ff9966;

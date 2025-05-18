@@ -1,5 +1,5 @@
 <main>
-        <div class="bejeli" *ngIf="isLoggedIn() && isAdmin(); else otherBlock">
+        <div class="bejeli" *ngIf="isLoggedIn() && isAdmin() && !showEditProduct; else otherBlock">
             <div class="wrapper">
                 <h2>Szerkesztői felület</h2>
                 <hr>
@@ -21,6 +21,8 @@
                                 <mat-option value="kulonleges">Különleges</mat-option>
                             </mat-select>
                         </mat-form-field>
+                        <br>
+                            <input type="file" (change)="onImageSelected($event)" accept="image/*" required />
                         <div class="gomb">
                             <button mat-flat-button>Hozzáadás</button>
                         </div>
@@ -28,9 +30,9 @@
                 </div>
             </div>
         </div>
-        <div class="bejeli">
+        <div class="bejeli" *ngIf="!showEditProduct">
             <div class="wrapper">
-                <h2>Termékek szerkesztése</h2>
+                <h2>Termékek</h2>
                 <hr>
                 <div class="szokoz">
                     <table class="admin-tabla">
@@ -46,7 +48,12 @@
                             <td>{{termek.termekara | hufcurrency }} Ft</td>
                             <td>{{getKategoriaLabel(termek.kategoria)}}</td>
                             <td><img mat-card-image src="{{termek.kepeleres}}" style="width: 100px;" alt="{{termek.termeknev}}"></td>
-                            <td><button class="erase-button" mat-flat-button (click)="termekTorles(termek.id)">Törlés</button></td>
+                            <td>
+                                <div class="button-col">
+                                    <button class="erase-button" mat-flat-button (click)="termekTorles(termek.id)">Törlés</button>
+                                    <button class="erase-button" mat-flat-button (click)="editProduct(termek.id); toggleEditProduct()" >Szerkesztés</button>
+                                </div>
+                            </td>
                         </tr>
                     </table>
                     <mat-paginator [length]="products.length" [pageSize]="pageSize" [pageIndex]="pageIndex" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)" aria-label="Oldal navigáció"></mat-paginator>
@@ -70,5 +77,37 @@
                     <a mat-list-item routerLink="/bejelentkezes" routerLinkActive="activate-list-item">Kattints ide a bejelentkezéshez!</a>
                 </div>
             </div>
+        <div class="bejeli" *ngIf="showEditProduct; else otherBlock">
+            <div class="wrapper">
+                <h2>Termék szerkesztése</h2>
+                <hr>
+                <div class="szokoz">
+                    <form [formGroup]="adminUpdateForm" (ngSubmit)="updateAdmin()">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Terméknév</mat-label>
+                            <input matInput type="text" formControlName="termeknev" required="true"/>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Termékára</mat-label>
+                            <input matInput type="text" formControlName="termekara" required="true"/>
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Kategória</mat-label>
+                            <mat-select formControlName="kategoria" required="true">
+                                <mat-option value="uditok">Üdítő</mat-option>
+                                <mat-option value="alkoholos">Alkoholos</mat-option>
+                                <mat-option value="kulonleges">Különleges</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <br>
+                            <input type="file" (change)="onImageSelected($event)" accept="image/*" required />
+                        <div class="gomb">
+                            <button mat-flat-button>Hozzáadás</button>
+                            <button mat-flat-button (click)="toggleEditProduct()">Mégse</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         </ng-template>
 </main>

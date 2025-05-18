@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, getDocs, query, where, doc, deleteDoc, addDoc, getDoc, orderBy, limit } from '@angular/fire/firestore';
+import { Firestore, collection, getDocs, query, where, doc, deleteDoc, addDoc, getDoc, orderBy, limit, updateDoc } from '@angular/fire/firestore';
 
 
 @Injectable({
@@ -34,6 +34,10 @@ export class TermekekService {
       console.error("Error fetching random products:", error);
       throw error;
     }
+  }
+  async updateProduct(id: string, data: any): Promise<void> {
+    const productDoc = doc(this.firestore, "Termekek", id);
+    await updateDoc(productDoc, data);
   }
   async getCheapestProducts(): Promise<any[]> {
     const termekekCollection = collection(this.firestore, "Termekek");

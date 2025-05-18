@@ -16,6 +16,7 @@ import { AuthService } from '../../shared/services/auth.service';
 import { OrderService } from '../../shared/services/order.service';
 import { AppComponent } from '../../app.component';
 import { KosarService } from '../../shared/services/kosar.service';
+import { getDownloadURL, getStorage, ref, uploadBytes } from '@angular/fire/storage';
 
 @Component({
   selector: 'app-admin',
@@ -40,11 +41,15 @@ import { KosarService } from '../../shared/services/kosar.service';
 export class AdminComponent implements OnInit{
 
   adminForm!: FormGroup;
+  adminUpdateForm!: FormGroup;
   products: any[] = [];
   pagedProducts: any[] = [];
   pageSize: number = 5;
   pageIndex: number = 0;
   pageSizeOptions: number[] = [5, 10, 20];
+  selectedImageFile: File | null = null;
+  showEditProduct = false;
+  editProductId: string | null = null;
   constructor(
     private termekekService: TermekekService,
     private formBuilder: FormBuilder,
@@ -52,11 +57,12 @@ export class AdminComponent implements OnInit{
     private authService: AuthService,
     private orderService: OrderService,
     private appcomponent: AppComponent,
-    private kosarService: KosarService
+    private kosarService: KosarService,
   ) {}
 
   ngOnInit(): void{
     this.inic();
+    this.inic2();
     this.loadProducts();
   }
 
@@ -67,6 +73,96 @@ export class AdminComponent implements OnInit{
       kategoria:['', Validators.required],
     });
   }
+  inic2(){
+    this.adminUpdateForm = this.formBuilder.group({
+      termeknev:['', Validators.required],
+      termekara:['', Validators.required],
+      kategoria:['', Validators.required],
+    });
+  }
+
+  onImageSelected(event: any): void {
+    this.selectedImageFile = event.target.files[0] || null;
+  }
+  toggleEditProduct(){
+    this.showEditProduct = !this.showEditProduct;
+  }
+
+  editProduct(termekId: string) {
+    this.editProductId = termekId;
+    const termek = this.pagedProducts.find(p => p.id === termekId);
+    if (termek) {
+      this.adminUpdateForm.patchValue({
+        termeknev: termek.termeknev,
+        termekara: termek.termekara,
+        kategoria: termek.kategoria
+      });
+    }
+  }
+
+  async adminAdd() {
+    if(this.adminForm.invalid || !this.selectedImageFile) {
+      return;
+    }
+
+    const filePath = `termekek/${Date.now()}_${this.selectedImageFile.name}`;
+    const storage = getStorage();
+    const storageRef = ref(storage, filePath);
+    await uploadBytes(storageRef, this.selectedImageFile);
+    const downloadURL = await getDownloadURL(storageRef);
+
+    const { termeknev, termekara, kategoria } = this.adminForm.value;
+    const newProduct = {
+      termeknev,
+      termekara,
+      kategoria,
+      kepeleres: downloadURL
+    }
+
+    await this.termekekService.addProduct(newProduct)
+
+    this.adminForm.reset();
+    this.selectedImageFile = null;
+
+    await this.loadProducts();
+    
+
+  }
+  async updateAdmin() {
+    if (!this.editProductId || this.adminUpdateForm.invalid) return;
+
+    let downloadURL: string | undefined;
+    if(this.selectedImageFile) {
+      const filePath = `termekek/${Date.now()}_${this.selectedImageFile.name}`;
+      const storage = getStorage();
+      const storageRef = ref(storage, filePath);
+      await uploadBytes(storageRef, this.selectedImageFile);
+      downloadURL = await getDownloadURL(storageRef);
+    }
+
+
+
+
+
+
+
+    const updatedData = {
+      termeknev: this.adminUpdateForm.value.termeknev,
+      termekara: Number(this.adminUpdateForm.value.termekara),
+      kategoria: this.adminUpdateForm.value.kategoria,
+      kepeleres: downloadURL
+    };
+  
+
+    await this.termekekService.updateProduct(this.editProductId, updatedData);
+    this.showEditProduct = false;
+    this.editProductId = null;
+    this.adminUpdateForm.reset();
+    this.selectedImageFile = null;
+    this.loadProducts(); // Refresh product list
+  }
+
+
   async loadProducts() {
     try {
       this.products = await this.termekekService.getAllProducts();
@@ -96,11 +192,6 @@ export class AdminComponent implements OnInit{
     return localStorage.getItem('admin-e') === 'true';
   }
 
-  adminAdd(): void{
-    if(this.adminForm.valid){
-      const{termeknev, termekara, kategoria} = this.adminForm.value; 
-    }
-  }
 async termekTorles(termekId: string): Promise<void> {
   try {
     await this.termekekService.deleteProduct(termekId);
