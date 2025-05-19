@@ -6,3 +6,6 @@ Admin felhasználó:
 Teszt felhasznalo:
   E-mail cím: teszt@teszt.com
   Jelszó: teszt123
+
+
+FONTOS! A rendelés leadásához szükséges szállítási és fizetési adat megadása a profilon belül!
